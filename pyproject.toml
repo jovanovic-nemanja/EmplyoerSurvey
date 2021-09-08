@@ -1,0 +1,97 @@
+[tool.poetry]
+name = "employer-survey-website"
+version = "0.1.3"
+description = "Employer survey website & app backend."
+authors = ["TensorTom <14287229+TensorTom@users.noreply.github.com>"]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.10"
+aiohttp = { version = "^3.7", extras = ["speedups"] }
+aiomysql = "^0.0.21"
+aiohttp-session = { extras = ["aioredis"], version = ">=2.9.0" }
+aioredis = { git = "https://github.com/TensorTom/aioredis.git" }
+aiohttp_security = { extras = ["session"], git = "https://github.com/TensorTom/aiohttp-security", branch = "master" }
+aiohttp-jinja2 = "^1.4.2"
+jinja2 = "^2.11.2"
+aiologger = "^0.6.0"
+aiorun = "^2020.12.1"
+pyprnt = "^2.5.3"
+geoip2 = "^4.1.0"
+ujson = "^4.0.2"
+PyJWT = "^2.0.1"
+aiohttp-basicauth = "^0.2.0"
+aiohttp-csrf = { git = "https://github.com/TensorTom/aiohttp-csrf", branch = "aiohttp3" }
+toml = "^0.10.2"
+environment = "^1.0.0"
+mo-dots = "^4.2.20340"
+PyYAML = "^5.4.1"
+cryptography = "^3.3.1"
+jupyter = "^1.0.0"
+switch = "^1.1.0"
+passlib = "^1.7.4"
+Cerberus = "^1.3.2"
+aiohttp-debugtoolbar = "^0.6.0"
+sendgrid = "^6.5.0"
+twilio = { git = "https://github.com/karls/twilio-python", branch = "pyjwt-2.0" }
+aioredis-cluster = "^1.5.2"
+aiohttp-jwtplus = "^0.2.0"
+aiohttp-jwt = "^0.6.1"
+#jwt = "^1.2.0"
+aiojobs = "^0.3.0"
+validators = "^0.18.2"
+python-validators = "^0.0.1"
+PyValidator = "^0.0.17"
+requests = "^2"
+aiodns = "^2.0.0"
+python-arango = "^7.1.0"
+colorutils = "^0.3.0"
+dill = "^0.3.3"
+traversy = "^0.1.32"
+numpy = "^1.20.1"
+PyQRCodeNG = "^1.3.6"
+redis_wrap = "^1.4.5"
+cron-descriptor = "^1.2.24"
+croniter = "^1.0.8"
+cron-validator = "^1.0.3"
+tzcron = "^1.0.0"
+cron-schedule-triggers = "^0.0.11"
+cronex = "^0.1.3"
+APScheduler = "^3.7.0"
+Js2Py = "^0.70"
+cron-converter = "^0.2.1"
+redisgraph = "^2.3.0"
+surveyJsUnofficial = "^0.0.1"
+questions = "^0.7.0-alpha.4"
+beautifulsoup4 = "^4.9.3"
+GitPython = "^3.1.14"
+llvmlite = "^0.36.0"
+quant-survey = "^0.0.2"
+OpenQuestion = "^0.1.0"
+survey = "^3.4.2"
+hemlock-survey = "^0.0.52"
+JPype1 = "<2.0"
+py4j = "<1.0"
+demjson = "^2.2.4"
+
+[tool.poetry.dev-dependencies]
+jupyter = "^1.0.0"
+pylint = "^2.6.0"
+dephell = "^0.8.3"
+Js2Py = "^0.70"
+nimporter = "^1.0.4"
+aiohttp-devtools = "^0.13.1"
+
+[tool.dephell.main]
+from = { format = "poetrylock", path = "poetry.lock" }
+envs = ["main"]
+to = { format = "setuppy", path = "setup.py" }
+
+[tool.dephell.pip]
+from = { format = "poetrylock", path = "poetry.lock" }
+envs = ["main"]
+to = { format = "pip", path = "requirements.txt" }
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+

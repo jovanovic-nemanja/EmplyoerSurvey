@@ -1,0 +1,92 @@
+.ap-component-label {
+  color: #000000;
+}
+
+/*.ap-content-switch-tab {
+  background-color: #15224F;
+}*/
+
+.ap-content-switch-time, .ap-content-switch-date {
+  color: #15224F;
+  border-color: #15224F;
+}
+
+.ap-content-switch-selected {
+  background-color: #15224F;
+  color: #FFFFFF !important;
+}
+
+.ap-theme-default {
+  color: $primary;
+  border-color: $primary;
+}
+
+.ap-component-selector {
+  border-color: $primary;
+}
+
+#ap-button-cancel {
+  color: #15224F;
+}
+
+.cron-picker-container {
+  text-align: center;
+  text-align-last: center;
+}
+
+li.boot-cron-active, li.boot-cron-active:focus, li.boot-cron-active:active {
+  color: #FFFFFF !important;
+  background-color: $primary !important;
+}
+
+.cron-picker-recurrence-types > li:hover {
+  color: #ffffff !important;
+  background-color: #FC926A !important;
+}
+
+/*.cron-picker-recurrence-types > li:hover .boot-cron-active {
+  color: #ffffff !important;
+  background-color: $primary !important;
+}*/
+
+#cron_modal .modal-body {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+#cron_modal .modal-footer {
+  padding-top: 0;
+  padding-bottom: 15px;
+}
+
+button.boot-cron-active, button.boot-cron-active:focus, button.boot-cron-active:active {
+  color: #FFFFFF !important;
+  background-color: $secondary !important;
+}
+
+.cron-picker-container li, .cron-picker-container a {
+  color: #000000;
+  width: 70px;
+  border-radius: 4px;
+}
+
+ul.cron-picker-recurrence-types{
+  padding-bottom: 7px !important;
+}
+
+.readonly-white {
+  background-color: #ffffff !important;
+}
+
+/*.ap-layout-popup .ap-cont {
+  max-width: 80vw;
+  height: 80vh;
+}
+
+.ap-layout-popup .ap-content {
+  height: 80vh;
+}*/
+
+#cron-modal-human {
+  font-size: 1.3em;
+}

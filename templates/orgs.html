@@ -1,0 +1,580 @@
+{% extends "base.html" %}
+
+{% block head_head %}
+<link rel="stylesheet" type="text/css" href="/css/lib/datatables.css" />
+<link href="/urora/scss/orgs.css?version=20210627" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<style>
+  .nav-link {
+    text-transform: initial;
+  }
+
+  #select-range {
+    box-shadow: none;
+    background: rgb(239, 242, 245);
+    padding: 3px;
+    border-radius: 8px;
+    margin: 0px;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+  }
+
+  #select-range li {
+    padding: 7px 8px;
+    white-space: nowrap;
+    color: rgb(88, 102, 126);
+    border-top: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-left: 1px solid transparent;
+    border-image: initial;
+    border-bottom: none;
+    bottom: 0px;
+    position: relative;
+    list-style: none;
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 600;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+
+  #select-range li.active {
+    background-color: white;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="d-flex flex-column pb-3 mb-4 mb-lg-5 align-items-center">
+  <h4 class="mt-0 mb-3 font-weight-bold">Organization Settings</h4>
+  <div class="text-center page-description">
+    Grow your company profile. Invite new teams and employees. Define your departments. View your team’s response rates. Export survey index and HiyerScore data.
+  </div>
+</div>
+
+<div class="card mb-3 mb-md-5 px-4 px-md-5 py-3 py-md-4">
+  <h5 class="font-weight-bold">Organization Name</h5>
+  <p class="m-b-15 font-16">
+    Please name your company in the way Hiyer will reference it throughout your corporate account.
+  </p>
+  <div class="row">
+    <div class="col-12 col-lg-5">
+      <span class="bmd-form-group is-filled">
+        <input type="text" class="form-control" maxlength="50" name="org_name" id="org_name" required
+          value="{{ org.org_name }}">
+      </span>
+    </div>
+  </div>
+  <h5 class="font-weight-bold mt-5">Departments</h5>
+  <p class="m-b-15 font-16">
+    Add your organization's departments:
+  </p>
+  <div id="departments">
+    <div id="add_org" class="orgcard-container" style="background-color: #FE6E41; color: #fff; width: 56px;">+</div>
+  </div>
+  <div class="row mt-3 d-none">
+    <div class="col-12 col-md-6">
+      <label>Department Name</label>
+      <input type="text" class="form-control" id="department-name">
+    </div>
+    <div class="col-12 col-md-6 d-flex flex-column flex-md-row justify-content-md-end align-items-md-end mt-3 mt-md-0">
+      <button class="btn btn-primary btn-block h56" id="save-dept">Save<div class="ripple-container"></div></button>
+      <button class="btn btn-info btn-block h56 mt-md-0 ml-0 ml-md-4" id="delete-dept">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3 mb-md-5 px-4 px-md-5 py-3 py-md-4">
+  <h5 class="font-weight-bold">Invite Your Team Members</h5>
+  <p class="m-b-15 font-16">
+    Enter individual employees by email or mobile number to invite them to join your company’s Hiyer account.
+  </p>
+  <div class="row mt-3">
+    <div class="col-12">
+      <ul class="nav nav-tabs flex-column flex-md-row">
+        <li class="nav-item text-center">
+          <a class="nav-link active px-5 py-3" href="#enter-email-content" data-input-type="text">
+            Enter email or phone number
+          </a>
+        </li>
+        <li class="nav-item text-center">
+          <a class="nav-link px-5 py-3" href="#upload-csv-content" data-input-type="file">
+            Upload csv file
+          </a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="enter-email-content">
+          <input name="invites_email" id="invites_email" class="form-control inviteIn invites_email mt-3" type="hidden"
+            placeholder="Enter email or phone number">
+        </div>
+        <div class="tab-pane fade" id="upload-csv-content">
+          <form id="csv-file-upload-form" class="mb-0" enctype="multipart/form-data">
+            <div class="row mt-3">
+              <div class="col-12 col-md-6 col-lg-8 mt-2">
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="csv-file-input" name="invite_csv" accept=".csv">
+                  <label class="custom-file-label" for="csv-file-input">Upload csv file</label>
+                </div>
+              </div>
+              <div class="col-12 col-md-6 col-lg-4">
+                <div class="d-flex justify-content-start justify-content-md-around">
+                  <div class="radio">
+                    <label class="pt-0">
+                      <input type="radio" name="invite_type" value="email" checked>
+                      <span class="ml-2">Send Email</span>
+                    </label>
+                  </div>
+                  <div class="radio ml-4 ml-md-0">
+                    <label>
+                      <input type="radio" name="invite_type" value="phone">
+                      <span class="ml-2">Send SMS</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- Tabs content -->
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-12 col-md-6">
+      <label>Assign to Department</label>
+      <select id="invite_dept" class="form-control">
+        {% for department in departments %}
+        <option value="{{ department.id }}">{{ department.dept_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-12 col-md-6 mt-3 mt-md-0">
+      <div class="d-flex justify-content-end align-items-end h-100">
+        <button class="btn btn-primary btn-lg btn-block h56" id="send_invites">Invite</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3 mb-md-5 px-4 px-md-5 py-3 py-md-4">
+  <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center mb-3">
+    <h5 class="font-weight-bold mb-3 m-md-0">Employee List</h5>
+    <!-- <a href="/add_employee" class="btn btn-primary btn-lg h56 px-5">Add employee</a> -->
+  </div>
+  <table class="table table-striped table-responsive-sm table-responsive-md table-responsive-lg font-16"
+    id="employee-table">
+    <thead>
+      <tr class="bg-primary">
+        <th class="text-white">Name</th>
+        <th class="text-white">Email</th>
+        <th class="text-white">Department</th>
+        <th class="text-white">Response Rate</th>
+        <th class="text-white">Peer Review</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for employee in employees %}
+      <tr data-id="{{ employee.id }}" data-dept="{{ employee.dept }}">
+        <td>{{ employee.first_name }} {{ employee.last_name }}</td>
+        <td>{{ employee.email_address or '' }}</td>
+        <td>{{ employee.dept_name or '' }}</td>
+        <td>{{ employee.response_rate|int }}%</td>
+        <td>{{ employee.peer_review|int }}%</td>
+        <td class="d-flex justify-content-end">
+          <button class="btn btn-primary edit-employee">Edit</button>
+          <button class="btn btn-info delete-employee ml-2">Delete</button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="card mb-3 mb-md-5 px-4 px-md-5 py-3 py-md-4">
+  <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center mb-3">
+    <h5 class="font-weight-bold mb-3 m-md-0">Export CSV</h5>
+  </div>
+  <div class="d-flex align-items-center mb-4">
+    <span class="mr-3 font-16">Date range: </span>
+    <ul id="select-range">
+      <li class="active" data-range="7d">7D</li>
+      <li data-range="1m">1M</li>
+      <li data-range="3m">3M</li>
+      <li data-range="1y">1Y</li>
+      <!-- <li data-range="all">ALL</li> -->
+      <li data-range="custom">
+        <div id="date-range-picker">
+          <input type="text" hidden>
+          <i class="fa fa-calendar"></i>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="d-flex flex-wrap">
+    <button class="btn btn-primary btn-lg h56 export-csv mr-4 mt-3" data-cat-id="0">HiyerScore</button>
+    {% for category in categories %}
+      <button class="btn btn-primary btn-lg h56 export-csv mt-0 mr-4 mt-3" data-cat-id="{{ category.id }}">{{ category.cat_name }}</button>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="modal fade" id="edit-employee-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header pb-3">
+        <h5 class="modal-title font-weight-bold">Change Employee's Department</h5>
+      </div>
+      <div class="modal-body border-top border-bottom">
+        <label>Department</label>
+        <select id="employee-department" class="form-control">
+          {% for department in departments %}
+          <option value="{{ department.id }}">{{ department.dept_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="modal-footer p-3">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary ml-3" id="confirm-edit">
+          Edit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="delete-employee-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header pb-3">
+        <h5 class="modal-title font-weight-bold">Delete employee</h5>
+      </div>
+      <div class="modal-body border-top border-bottom">Are you sure?</div>
+      <div class="modal-footer p-3">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-info ml-3" id="confirm-employee-delete">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="delete-department-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header pb-3">
+        <h5 class="modal-title font-weight-bold">Delete department</h5>
+      </div>
+      <div class="modal-body border-top border-bottom">Are you sure?</div>
+      <div class="modal-footer p-3">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-info ml-3" id="confirm-department-delete">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- section search -->
+<div id="myOverlay" class="overlay">
+  <div class="d-flex">
+    <div class="closebtn"><i class="fa fa-times fa-lg close-icon" title="Close Overlay" style="color: #FFFFFF"></i>
+    </div>
+    <div>
+      <h3 class="text-white">Add departments</h3>
+      <input id="deptTags" name="deptsIn" value="" type="hidden">
+    </div>
+  </div>
+</div>
+{% endblock body %}
+
+{% block body_foot %}
+<script type="text/javascript" src="/js/lib/datatables.js"></script>
+<script src='/js/node_modules/@yaireo/tagify/dist/tagify.min.js'></script>
+<script src='/js/node_modules/@yaireo/tagify/dist/jQuery.tagify.min.js'></script>
+<script src="/urora/plugins/moment/moment.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script>
+  var org_name_cache = '{{ org.org_name }}';
+  var departments = {{ departments| tojson }};
+  var tagifyDepts;
+</script>
+<script src="/js/tags.js?version=20210627"></script>
+<script src="/js/orgs.js?version=20210627"></script>
+<script>
+  var selectedDeptId = '';
+  var selectedEmployeeId = '';
+  var inputType = 'text';
+
+  var employeeTable = $('#employee-table').DataTable({
+    filter: false,
+    lengthChange: false,
+    bInfo: false,
+    sort: false,
+  });
+
+  var dateRange = '7d', startDate, endDate;
+
+  $('#add_org').click(function () {
+    selectedDeptId = '';
+    $('#department-name').val('');
+    $('#department-name').parents('.row').removeClass('d-none');
+  });
+
+  $('body').on('click', '.orgcard-container', function () {
+    selectedDeptId = $(this).data('dept-id');
+    $('#department-name').val($(this).data('name'));
+    $('#department-name').parents('.row').removeClass('d-none');
+  });
+
+  $('#save-dept').click(function () {
+    if (!$('#department-name').val()) {
+      alertify.success('Department name not specified.');
+    }
+
+    wscb.send({
+      cmd: 'save-dept',
+      id: selectedDeptId,
+      name: $('#department-name').val(),
+      org: '{{ org.id }}',
+    }, function (resp) {
+      log_resp(resp);
+      if (resp.hasOwnProperty('success') && resp.success) {
+        if ($(`[data-dept-id=${resp.department.id}]`).length) {
+          $(`[data-dept-id=${resp.department.id}]`).data('name', resp.department.dept_name).find('span').text(resp.department.dept_name);
+          $('#invite_dept').find(`[value=${resp.department.id}]`).text(resp.department.dept_name);
+          $('#employee-department').find(`[value=${resp.department.id}]`).text(resp.department.dept_name);
+        } else {
+          addDeptCard(resp.department);
+          $('#invite_dept').append(`<option value="${resp.department.id}">${resp.department.dept_name}</option>`);
+          $('#employee-department').append(`<option value="${resp.department.id}">${resp.department.dept_name}</option>`);
+        }
+      }
+      $('#department-name').val('');
+      selectedDeptId = '';
+    });
+  });
+
+  $('#delete-dept').click(function () {
+    if (selectedDeptId) {
+      $('#delete-department-modal').modal('show');
+    } else {
+      $('#department-name').val('');
+    }
+  });
+
+  $('.delete-employee').click(function () {
+    $('tr.select').removeClass('select');
+    $(this).parents('tr').addClass('select');
+    selectedEmployeeId = $(this).parents('tr').data('id');
+    $('#delete-employee-modal').modal('show');
+  });
+
+  $('.edit-employee').click(function () {
+    $('tr.select').removeClass('select');
+    $(this).parents('tr').addClass('select');
+    selectedEmployeeId = $(this).parents('tr').data('id');
+    $('#employee-department').val($(this).parents('tr').data('dept'))
+    $('#edit-employee-modal').modal('show');
+  });
+
+  $('#confirm-edit').click(function () {
+    $.ajax({
+      url: '/api/do_update_employee',
+      type: 'post',
+      dataType: 'json',
+      data: {
+        employee_id: selectedEmployeeId,
+        department: $('#employee-department').val()
+      },
+      success: function (data) {
+        $('#edit-employee-modal').modal('hide');
+        if (data.success) {
+          log_resp({
+            'success': true,
+            'msg': 'Success'
+          });
+          $('tr[data-id=' + data.employee_id + ']').data('dept', $('#employee-department').val());
+          $('tr[data-id=' + data.employee_id + '] td:eq(2)').text($('#employee-department option:selected').text());
+        } else {
+          log_resp({
+            'success': false,
+            'msg': 'Failed'
+          });
+        }
+      }
+    });
+  });
+
+  $('#confirm-employee-delete').click(function () {
+    $.ajax({
+      url: '/api/do_delete_employee',
+      type: 'post',
+      dataType: 'json',
+      data: {
+        employee_id: selectedEmployeeId
+      },
+      success: function (data) {
+        $('#delete-employee-modal').modal('hide');
+        if (data.success) {
+          log_resp({
+            'success': true,
+            'msg': 'Success'
+          });
+          employeeTable.row('.select').remove().draw(false);
+        } else {
+          log_resp({
+            'success': false,
+            'msg': 'Failed'
+          });
+        }
+      }
+    });
+  });
+
+  $('#confirm-department-delete').click(function () {
+    $('#delete-department-modal').modal('hide');
+    wscb.send({
+      cmd: 'delete-dept',
+      id: selectedDeptId,
+    }, function (resp) {
+      log_resp(resp);
+      if (resp.hasOwnProperty('success') && resp.success) {
+        $(`[data-dept-id=${resp.id}]`).remove();
+        $('#invite_dept').find(`[value=${resp.id}]`).remove();
+        $('#employee-department').find(`[value=${resp.id}]`).remove();
+      }
+      $('#department-name').val('');
+      selectedDeptId = '';
+    });
+  });
+
+  $('#csv-file-input').change(function () {
+    if (this.files.length) {
+      $(this).siblings('label').text(this.files[0].name);
+    } else {
+      $(this).siblings('label').text('Upload csv file');
+    }
+  });
+
+  $('#send_invites').click(function () {
+    var formData = new FormData($('#csv-file-upload-form')[0]);
+    if (inputType == 'text') {
+      let recipJ = $('#invites_email').val();
+      tagifyInv.removeAllTags();
+      if (!recipJ) {
+        log_resp({
+          success: false,
+          msg: 'Email or Phone number not specified'
+        })
+        return;
+      }
+      let mobile_numbers = [];
+      let emails = [];
+      let recipients = JSON.parse(recipJ);
+      recipients.forEach(recip => {
+        recip = recip.value;
+        if (phone_validator.test(recip))
+          return mobile_numbers.push(recip);
+        if (email_validator.test(recip))
+          emails.push(recip);
+      });
+      if (!mobile_numbers.length && !emails.length) {
+        log_resp({
+          success: false,
+          msg: 'Input correct value'
+        })
+        return;
+      }
+      formData.append('mobile_numbers', mobile_numbers);
+      formData.append('invite_emails', emails);
+    } else {
+      if (!$('#csv-file-input')[0].files.length) {
+        log_resp({
+          success: false,
+          msg: 'File not specified'
+        })
+        return;
+      }
+      formData.append('invite_type', $('[name=invite_type]:checked').val());
+    }
+    formData.append('department', $('#invite_dept').val());
+    formData.append('input_type', inputType);
+    $.ajax({
+      url: '/api/do_invite_employees',
+      type: 'post',
+      dataType: 'json',
+      cache: false,
+      contentType: false,
+      processData: false,
+      data: formData,
+      success: function (data) {
+        log_resp(data);
+        $('#csv-file-upload-form')[0].reset();
+        $('#csv-file-input').siblings('label').text('Upload csv file');
+      }
+    });
+  });
+
+  $('.nav-tabs a.nav-link').click(function () {
+    var x = $(this).attr('href');
+    x = x.replace('#', '');
+    $(this).parents('.nav-item').siblings('.nav-item').find('.nav-link').removeClass('active');
+    $(this).addClass('active');
+    $('.tab-content .tab-pane').each(function () {
+      var y = $(this).attr('id');
+      if (x == y) $(this).addClass('active show');
+      else $(this).removeClass('active show');
+    });
+    inputType = $(this).parents('.nav-item').data('inputType');
+
+    return false;
+  });
+
+  $('#select-range li').click(function () {
+    if ($(this).hasClass('active')) {
+      return;
+    }
+    $('#select-range li').removeClass('active');
+    $(this).addClass('active');
+    dateRange = $(this).data('range');
+  });
+
+  $('#date-range-picker').daterangepicker({
+    "showDropdowns": true,
+    ranges: {
+      'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+      'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+      'Last 90 Days': [moment().subtract(89, 'days'), moment()],
+      'Last 180 Days': [moment().subtract(179, 'days'), moment()],
+      'Last 365 Days': [moment().subtract(364, 'days'), moment()],
+    },
+    "showCustomRangeLabel": false,
+    "alwaysShowCalendars": true,
+    "startDate": moment().subtract(6, 'days'),
+    "endDate": moment(),
+    "opens": "left"
+  }, function (start, end, label) {
+    startDate = start.format('YYYY-MM-DD');
+    endDate = end.format('YYYY-MM-DD');
+  });
+
+  $('.export-csv').click(function () {
+    location.href = `/export_csv?cat_id=${$(this).data('catId')}&date_range=${dateRange}&start_date=${startDate}&end_date=${endDate}`;
+  });
+</script>
+{% endblock body_foot %}

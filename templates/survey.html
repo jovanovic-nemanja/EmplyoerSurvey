@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block body %}
+{% for row in questions %}
+<div class="card px-4 py-5 flex-row m-b-38">
+  <div class="flex-grow-2">
+    <h5 class="mt-0 mb-3 font-weight-bold">{{ row.title }}</h5>
+    <div class="font-18 m-b-30 question-title">{{ row.question }}</div>
+    <div class="d-flex">
+      <div class="d-flex flex-column align-items-center mr-5">
+        <span>1</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="answer-rate-{{ row.id }}" value="1">
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center mr-5">
+        <span>2</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="answer-rate-{{ row.id }}" value="2">
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center mr-5">
+        <span>3</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="answer-rate-{{ row.id }}" value="3">
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center mr-5">
+        <span>4</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="answer-rate-{{ row.id }}" value="4">
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center mr-5">
+        <span>5</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="answer-rate-{{ row.id }}" value="5">
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center mr-5">
+        <span>6</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="answer-rate-{{ row.id }}" value="6">
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center mr-5">
+        <span>7</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="answer-rate-{{ row.id }}" value="7">
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center mr-5">
+        <span>8</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="answer-rate-{{ row.id }}" value="8">
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center mr-5">
+        <span>9</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="answer-rate-{{ row.id }}" value="9">
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center mr-5">
+        <span>10</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="answer-rate-{{ row.id }}" value="10">
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex-grow-1">
+    <button class="btn btn-info btn-block btn-lg h62 answer-question" data-id="{{ row.id }}">
+      Submit
+    </button>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block body_foot %}
+<script>
+  $(function () {
+    ws_connect();
+    $('.answer-question').click(function () {
+      var $this = $(this);
+      $this.prop('disabled', true);
+      var inviteId = $this.data('id');
+      var answer = $('[name="answer-rate-' + inviteId + '"]:checked').val();
+      if (!answer) {
+        log_resp({
+          'success': false,
+          'msg': 'Please choose rate'
+        });
+        $this.prop('disabled', false);
+        return;
+      }
+      wscb.send({
+        cmd: 'answer',
+        invite_id: inviteId,
+        answer: answer,
+      }, function (resp) {
+        log_resp(resp);
+        if (resp.hasOwnProperty('success') && resp.success) {
+          $this.parents('.card').fadeOut();
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}

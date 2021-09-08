@@ -1,0 +1,35 @@
+/*
+ Template Name: Urora - Bootstrap 4 Admin Dashboard
+ Author: Mannatthemes
+ Website: www.mannatthemes.com
+ File: Icons
+ */
+
+@import "../icons/font-awesome/scss/font-awesome";
+@import "../icons/material-design/materialdesignicons";
+@import "../icons/themify-icons/themify-icons";
+
+.homepage-icon {
+  width: 6em;
+  height: 6em;
+}
+
+.faded-primary {
+  color: #FFD6CB;
+}
+
+.faded-secondary {
+  color: #C7CAD5;
+}
+
+.faded-secondary-bg {
+  background-color: #C7CAD5;
+}
+
+.answer-icon {
+  color: #FFCAB6
+}
+
+.answer-icon, .selected {
+  color: #FFCAB6
+}

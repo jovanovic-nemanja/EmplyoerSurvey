@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="d-flex flex-column pb-3 mb-4 mb-md-5 align-items-center">
+  <h4 class="m-0 font-weight-bold text-center">{{ stats_data.question }}</h4>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-sm-12">
+    <div class="card home-card p-3 h-100 text-center">
+      <div class="card-body table-responsive p-0">
+        <h5 class="font-32 font-weight-bold text-primary">{{ stats_data.survey_count }}</h5>
+        <hr>
+        <h5 class="font-16 text-info">Times Sent</h5>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-sm-12 mt-4 mt-md-0">
+    <div class="card home-card p-3 h-100 text-center">
+      <div class="card-body table-responsive p-0">
+        <h5 class="font-32 font-weight-bold text-primary d-flex justify-content-center">
+          <span>
+            {% if stats_data.receive_count == 0 %}
+              0
+            {% else %}
+              {{ (stats_data.receive_count / stats_data.sent_count * 100)|int }}
+            {% endif %}
+          </span>
+          <span class="align-middle" style="font-size: 25px;">%</span>
+        </h5>
+        <hr>
+        <h5 class="font-16 text-info">Response Rate</h5>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-sm-12 mt-4 mt-md-0">
+    <div class="card home-card p-3 h-100 text-center">
+      <div class="card-body table-responsive p-0">
+        <h5 class="font-32 font-weight-bold text-primary">{{ "%.1f"|format(stats_data.average|float) }}</h5>
+        <hr>
+        <h5 class="font-16 text-info">Average Score</h5>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

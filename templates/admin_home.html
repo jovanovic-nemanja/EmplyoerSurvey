@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock head %}
+
+{% block body %}
+
+<center>
+  <p>
+    User App Token: <input id="jwt_token" type="text" size="25">
+  </p>
+  <h3>Live Websockets Data</h3>
+  <p>&nbsp;</p>
+  {% for id in range(7): %}
+  <div id="row_{{id}}"></div>
+  <BR>
+  {% endfor %}
+</center>
+
+{% endblock body %}
+

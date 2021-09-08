@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block head_head %}
+<link href="/urora/plugins/fullcalendar/vanillaCalendar.css" rel="stylesheet" type="text/css"/>
+<!-- DataTables -->
+<link href="/urora/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
+<link href="/urora/plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
+<!-- Responsive datatable examples -->
+<link href="/urora/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
+
+<link href="/js/jqcron/src/jqCron.css" type="text/css"/>
+<style>
+  /*.table-row, table.dataTable tr {
+    border-spacing: 60px !important;
+    padding: 30px !important;
+    border-collapse: separate !important;
+    border-style: solid;
+  }
+
+  td {
+    border: 1px solid #666;
+    border-spacing: 60px !important;
+    padding: 30px !important;
+    border-collapse: separate !important;
+    border-style: solid;
+  }
+
+  table th, table td {
+    padding: 20px; !* Apply cell padding *!
+  }
+
+  table.dataTable td {
+    padding: 30px;
+    border-spacing: 60px !important;
+    border-collapse: separate !important;
+  }
+
+  table.dataTable td {
+    padding: 20px;
+    border-spacing: 60px !important;
+    border-collapse: separate !important;
+  }*/
+</style>
+{% endblock head_head %}
+
+{% block head %}
+{% endblock head %}
+{% block body %}
+
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <div class="card m-b-30">
+      <div class="card-body table-responsive">
+                <h5 class="header-title">Surveys</h5>
+                <p class="text-muted"></p>
+        <div class="">
+          <table class="table table-questions table-notopborder" id="table-questions" style="">
+            <thead>
+            <tr>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!--end row-->
+
+<div class="row">
+  <div class="col-md-12 col-xl-5">
+
+  </div>
+</div>
+
+  {% endblock body %}
+  {% block body_foot %}
+  <script>
+    // var tagifyIcon,
+    //   tagifyQtags
+    let questions = []
+    let survey_preset
+    {% if qid is defined and qid is not none %}
+    survey_preset = {{qid}}
+    {% else %}
+    survey_preset = null
+    {% endif %}
+  </script>
+  <script src="/js/jqcron/src/jqCron.js"></script>
+  <script src="/js/jqcron/src/jqCron.en.js"></script>
+  <script src='/js/node_modules/@yaireo/tagify/dist/tagify.min.js'></script>
+  <script src='/js/node_modules/@yaireo/tagify/dist/jQuery.tagify.min.js'></script>
+  <!-- Required datatable js -->
+  <script src="/urora/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="/urora/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+  <!-- Buttons examples -->
+  <script src="/urora/plugins/datatables/dataTables.buttons.min.js"></script>
+  <script src="/urora/plugins/datatables/buttons.bootstrap4.min.js"></script>
+  <script src="/urora/plugins/datatables/jszip.min.js"></script>
+  <script src="/urora/plugins/datatables/pdfmake.min.js"></script>
+  <script src="/urora/plugins/datatables/vfs_fonts.js"></script>
+  <script src="/urora/plugins/datatables/buttons.html5.min.js"></script>
+  <script src="/urora/plugins/datatables/buttons.print.min.js"></script>
+  <script src="/urora/plugins/datatables/buttons.colVis.min.js"></script>
+  <!-- Responsive examples -->
+  <script src="/urora/plugins/datatables/dataTables.responsive.min.js"></script>
+  <script src="/urora/plugins/datatables/responsive.bootstrap4.min.js"></script>
+
+  <script src="/js/lib/morris.min.js"></script>
+  <!--  <script src="/urora/pages/dashboard.js"></script>-->
+  <script src="/urora/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+  <script src="/urora/plugins/datatables/dataTables.responsive.min.js"></script>
+  <script src="/urora/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="/urora/plugins/datatables/dataTables.buttons.min.js"></script>
+  <script src="/urora/pages/datatables.init.js"></script>
+  <script src="/js/tags.js"></script>
+  <script src="/js/answer.js"></script>
+
+  {% endblock body_foot %}
+

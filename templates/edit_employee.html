@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block body %}
+{% if auth is defined and auth.is_employer %}
+<div class="d-flex flex-column mb-4 mb-lg-5 align-items-center">
+  <h4 class="m-0 font-weight-bold">
+    {% if employee is defined %}
+    Edit Employee
+    {% else %}
+    Add Employee
+    {% endif %}
+  </h4>
+</div>
+<div class="card mb-3 mb-md-5 px-4 px-md-5 py-3 py-md-4">
+  <div class="row">
+    <div class="col-12 col-md-6">
+      <label>First Name</label>
+      <input type="text" class="form-control" id="first-name" value="{% if employee is defined %}{{ employee.first_name }}{% endif %}">
+    </div>
+    <div class="col-12 col-md-6 mt-3 mt-md-0">
+      <label>Last Name</label>
+      <input type="text" class="form-control" id="last-name" value="{% if employee is defined %}{{ employee.last_name }}{% endif %}">
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-12 col-md-6">
+      <label>Email</label>
+      <input type="email" class="form-control" id="email" value="{% if employee is defined %}{{ employee.email_address }}{% endif %}">
+    </div>
+    <div class="col-12 col-md-6 mt-3 mt-md-0">
+      <label>Send to Department</label>
+      <select class="form-control" id="department">
+        {% for department in departments %}
+        <option value="{{ department.id }}" {% if employee is defined and department.id == employee.id %}selected{% endif %}>{{ department.dept_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-12 offset-lg-6 col-lg-6">
+      <div class="d-flex justify-content-end align-items-end h-100">
+        <button class="btn btn-primary btn-lg btn-block h56" id="btn-save">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block body_foot %}
+<script>
+  var employeeId = {% if employee is defined %}{{ employee.id }}{% else %}0{% endif %};
+  $('#btn-save').click(function () {
+    if (!$('#first-name').val()) {
+      log_resp({
+        'success': false,
+        'msg': 'First Name not speficied.'
+      });
+      return;
+    }
+    if (!$('#last-name').val()) {
+      log_resp({
+        'success': false,
+        'msg': 'Last Name not speficied.'
+      });
+      return;
+    }
+    if (!email_validator.test($('#email').val())) {
+      log_resp({
+        'success': false,
+        'msg': 'Email not correct.'
+      });
+      return;
+    }
+    if (!$('#department').val()) {
+      log_resp({
+        'success': false,
+        'msg': 'Department not speficied.'
+      });
+      return;
+    }
+    $.ajax({
+      url: '/api/do_update_employee',
+      type: 'post',
+      dataType: 'json',
+      data: {
+        employee_id: employeeId,
+        first_name: $('#first-name').val(),
+        last_name: $('#last-name').val(),
+        email: $('#email').val(),
+        department: $('#department').val(),
+      },
+      success: function () {
+        log_resp({
+        'success': true,
+        'msg': 'Success'
+      });
+        window.location.href = '/org'
+      }
+    });
+  });
+</script>
+{% endblock %}

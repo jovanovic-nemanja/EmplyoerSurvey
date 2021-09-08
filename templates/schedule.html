@@ -1,0 +1,661 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+@media (max-width: 576px) {
+  .checkbox {
+    width: 46px;
+  }
+}
+.dropdown-toggle::after {
+  content: none;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="d-flex flex-column pb-3 mb-4 mb-lg-5 align-items-center">
+  <h4 class="mt-0 mb-3 font-weight-bold">Hiyer: Survey Scheduler</h4>
+  <div class="text-center page-description">
+    Add a new index to survey or edit existing surveys.
+  </div>
+</div>
+
+<div class="d-flex justify-content-center p-3 bg-white mb-5" style="border: 2px dotted #181f4e40; cursor: pointer;"
+  id="new-survey">
+  <span class="iconify" data-icon="ant-design:plus-circle-filled" data-inline="false"
+    style="font-size: 20px; color: #15224F"></span>
+  <h5 class="ml-2 my-0 font-18 font-weight-bold">Schedule a New Survey</h5>
+</div>
+
+<div class="card px-3 pt-4 pb-5 mb-5" id="edit-schedule-section">
+  <div class="row">
+    <div class="col-12 col-lg-8">
+      <label>&nbsp;</label>
+      <div class="input-group input-group-lg">
+        <input type="text" class="form-control custom-input" aria-label="Large" placeholder="Enter Survey Title" id="survey-title">
+      </div>
+    </div>
+    <div class="col-12 col-lg-4 mt-3 mt-lg-0">
+      <label>Select Category</label>
+      <select id="category" class="form-control custom-select selectpicker">
+        {% for category in categories %}
+        <option value="{{ category.id }}">{{ category.cat_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-lg-8">
+      <div class="d-flex justify-content-between mt-2 flex-wrap flex-lg-nowrap">
+        <div class="d-flex flex-wrap flex-lg-nowrap">
+          <div class="checkbox mr-4 flex-grow-1">
+            <label>
+              <input type="checkbox" name="weekly" value="Mon"> Mon
+            </label>
+          </div>
+          <div class="checkbox mr-4 flex-grow-1">
+            <label>
+              <input type="checkbox" name="weekly" value="Tue"> Tue
+            </label>
+          </div>
+          <div class="checkbox mr-4 flex-grow-1">
+            <label>
+              <input type="checkbox" name="weekly" value="Wed"> Wed
+            </label>
+          </div>
+          <div class="checkbox mr-4 flex-grow-1">
+            <label>
+              <input type="checkbox" name="weekly" value="Thu"> Thu
+            </label>
+          </div>
+          <div class="checkbox mr-4 flex-grow-1">
+            <label>
+              <input type="checkbox" name="weekly" value="Fri"> Fri
+            </label>
+          </div>
+          <div class="checkbox mr-4 flex-grow-1">
+            <label>
+              <input type="checkbox" name="weekly" value="Sat"> Sat
+            </label>
+          </div>
+          <div class="checkbox mr-4 flex-grow-1">
+            <label>
+              <input type="checkbox" name="weekly" value="Sun"> Sun
+            </label>
+          </div>
+          <div class="checkbox d-block d-lg-none">
+            <label>
+              <input type="checkbox" class="weekly-random"> Random
+            </label>
+          </div>
+        </div>
+        <div class="checkbox d-none d-lg-block">
+          <label>
+            <input type="checkbox" class="weekly-random"> Randomize
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-4">
+    <div class="col-12 col-lg-3">
+      <label>Send at</label>
+      <div class="input-group input-group-lg">
+        <input type="text" class="form-control text-center schedule-survey-input" id="send-at" data-toggle="datetime" data-type="time" />
+      </div>
+    </div>
+    <div class="col-12 col-lg-3 mt-3 mt-lg-0">
+      <label>Question Sending Order</label>
+      <select id="order" class="form-control custom-select selectpicker">
+        <option value="1">Creation date</option>
+        <option value="0">Random order</option>
+      </select>
+    </div>
+    <div class="col-12 col-lg-3 mt-3 mt-lg-0">
+      <label>Repeat Questions?</label>
+      <select id="repeat" class="form-control custom-select selectpicker">
+        <option value="7">Every 7 days</option>
+        <option value="14">Every 14 days</option>
+        <option value="30">Every 30 days</option>
+        <option value="90">Every 3 months</option>
+        <option value="180">Every 6 months</option>
+      </select>
+    </div>
+    <div class="col-12 col-lg-3 mt-3 mt-lg-0">
+      <label>Send to Department</label>
+      <select id="department" class="form-control custom-select selectpicker">
+        {% for department in departments %}
+        <option value="{{ department.id }}">{{ department.dept_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="row mt-0 mt-lg-4 align-items-end">
+    <div class="col-12 col-lg-3 mt-3 mt-lg-0">
+      <label>Start Date</label>
+      <div class="input-group input-group-lg">
+        <input type="text" class="form-control text-center schedule-survey-input" id="start-date" data-toggle="datetime" data-type="date" />
+      </div>
+    </div>
+    <div class="col-12 col-lg-3 mt-3 mt-lg-0">
+      <label>End Date</label>
+      <div class="input-group input-group-lg">
+        <input type="text" class="form-control text-center schedule-survey-input" id="end-date" placeholder="Never" data-toggle="datetime" data-type="date" />
+      </div>
+    </div>
+    <div class="col-12 col-lg-6 mt-3 mt-lg-0">
+      <button class="btn btn-primary btn-block btn-lg h56" id="schedule-survey">
+        Schedule Survey
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="survey-list">
+  {% for survey in surveys %}
+  <div class="card px-3 py-4 pt-lg-5 mb-5 survey-card" data-id="{{ survey.id }}" data-title="{{ survey.title }}" data-category="{{ survey.category }}" data-department="{{ survey.department }}" data-weekly="{{ survey.weekly }}" data-send-at="{{ survey.send_at }}" data-start-date="{{ survey.start_date }}" data-end-date="{{ survey.end_date }}" data-order="{{ survey.question_order }}" data-repeat="{{ survey.repeat }}" id="survey-{{ survey.id }}">
+    <div class="row">
+      <div class="col-lg-2 col-12 d-flex d-lg-block flex-column align-items-center">
+        <div class="font-18 font-weight-bold mr-0 mr-lg-4 mb-3 survey-title text-center text-lg-left">{{ survey.title }}</div>
+        <span class="badge text-uppercase p-2 text-white survey-category"
+          style="font-size: 10px; border-radius: 4px; background-color: {{ cat_colors[survey.cat_slug] }};">{{ survey.cat_name }}</span>
+        <div class="d-flex align-items-center my-3 mt-lg-5 mb-lg-0 dropdown">
+          <a class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="click-hand fas fa-ellipsis-v fa-fw" style="font-size: 20px; color: #5F6368;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item copy-btn" href="#">
+              <span class="iconify mr-2" data-icon="akar-icons:copy" data-inline="false" style="font-size: 30px; color: #5F6368;"></span>
+              Duplicate
+            </a>
+            <a class="dropdown-item trash-btn" href="#">
+              <span class="iconify mr-2" data-icon="bi:trash" data-inline="false" style="font-size: 30px; color: #5F6368;"></span>
+              Delete
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5 col-12 px-5">
+        <div class="row">
+          <div class="col-4 text-center px-lg-3">
+            <span class="question-count"
+              style="font-size: 50px; font-weight: bold; line-height: 1; color: {{ cat_colors[survey.cat_slug] }};">{{ survey.question_count }}</span>
+            <hr>
+            <h5 class="survey-stats-label">Survey Questions</h5>
+          </div>
+          <div class="col-4 text-center px-lg-3">
+            <div class="d-flex justify-content-center"
+              style="font-size: 50px; font-weight: bold; line-height: 1; color: {{ cat_colors[survey.cat_slug] }};">
+              <span class="response-rate">
+                {% if survey.receive_count == 0 %}
+                  0
+                {% else %}
+                  {{ (survey.receive_count / survey.sent_count * 100)|int }}
+                {% endif %}
+              </span>
+              <span class="align-middle" style="font-size: 25px;">%</span>
+            </div>
+            <hr>
+            <h5 class="survey-stats-label">Response Rate</h5>
+          </div>
+          <div class="col-4 text-center px-lg-3">
+            <span class="days-active"
+              style="font-size: 50px; font-weight: bold; line-height: 1; color: {{ cat_colors[survey.cat_slug] }};">{% if survey.days_active > 0 %}{{ survey.days_active }}{% else %}0{% endif %}</span>
+            <hr>
+            <h5 class="survey-stats-label">Days Active</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5 col-12 mt-5 mt-lg-0">
+        <div class="d-flex flex-column align-items-center">
+          <button class="btn btn-info btn-block btn-lg h62 btn-edit-survey">
+            Edit Survey
+          </button>
+          <a href="/survey_stats/{{ survey.id }}" class="btn btn-primary btn-block btn-lg h62">
+            View Analytics
+          </a>
+        </div>
+      </div>
+      <!-- <div class="col-9 pl-0">
+        <div class="row">
+        </div>
+      </div> -->
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="card px-3 py-4 pt-lg-5 mb-5 survey-clone">
+  <div class="row">
+    <div class="col-12 col-lg-3 mt-3 mt-lg-0">
+      <div class="font-18 font-weight-bold mr-4 mb-3 survey-title">Performance Survey Catering 2021</div>
+      <span class="badge text-uppercase p-2 text-white survey-category"
+        style="font-size: 10px; border-radius: 4px; background-color: #FF5B61;">performance</span>
+      <div class="d-flex align-items-center my-3 mt-lg-5 mb-lg-0 dropdown">
+        <a class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="click-hand fas fa-ellipsis-v fa-fw" style="font-size: 20px; color: #5F6368;"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item copy-btn" href="#">
+            <span class="iconify mr-2" data-icon="akar-icons:copy" data-inline="false" style="font-size: 30px; color: #5F6368;"></span>
+            Duplicate
+          </a>
+          <a class="dropdown-item trash-btn" href="#">
+            <span class="iconify mr-2" data-icon="bi:trash" data-inline="false" style="font-size: 30px; color: #5F6368;"></span>
+            Delete
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="col-9 pl-0">
+      <div class="row">
+        <div class="col-6 pl-0">
+          <div class="row">
+            <div class="col-4 text-center px-lg-3">
+              <span class="question-count change-color"
+                style="font-size: 50px; font-weight: bold; line-height: 1; color: #FF5B61">23</span>
+              <hr>
+              <h5 class="survey-stats-label">Survey Questions</h5>
+            </div>
+            <div class="col-4 text-center px-lg-3">
+              <div class="change-color" style="font-size: 50px; font-weight: bold; line-height: 1; color: #FF5B61"><span
+                  class="response-rate">88</span><sup class="align-middle" style="font-size: 25px;">%</sup></div>
+              <hr>
+              <h5 class="survey-stats-label">Response Rate</h5>
+            </div>
+            <div class="col-4 text-center px-lg-3">
+              <span class="days-active change-color"
+                style="font-size: 50px; font-weight: bold; line-height: 1; color: #FF5B61">41</span>
+              <hr>
+              <h5 class="survey-stats-label">Days Active</h5>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 pl-5">
+          <div class="d-flex flex-column align-items-center">
+            <button class="btn btn-info btn-block btn-lg h62 btn-edit-survey">
+              Edit Survey
+            </button>
+            <a href="/stats" class="btn btn-primary btn-block btn-lg h62">
+              View Analytics
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="delete-modal"
+  data-mdb-backdrop="static"
+  data-mdb-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header pb-3">
+        <h5 class="modal-title font-weight-bold" id="staticBackdropLabel">Delete survey</h5>
+      </div>
+      <div class="modal-body border-top border-bottom">Are you sure?</div>
+      <div class="modal-footer p-3">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary ml-3" id="confirm-delete">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="datetime-picker" class="custom-modal">
+  <div class="custom-modal-content">
+    <h4 class="p-3 font-weight-bold">Select</h4>
+    <div class="d-flex justify-content-center">
+      <input type="text">
+    </div>
+    <div class="footer border-0 d-flex justify-content-end px-3">
+      <a href="#" class="text-uppercase px-3" id="btn-cancel">Cancel</a>
+      <a href="#" class="text-uppercase px-3" id='btn-clear'>Clear</a>
+      <a href="#" class="text-uppercase px-3 text-primary" id="btn-set">Set</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block body_foot %}
+<script src="/urora/plugins/moment/moment.js"></script>
+<script src="/js/lib/combodate.js"></script>
+<script>
+if (window.performance.getEntriesByType("navigation")[0].type === "back_forward") {
+  location.reload(true);
+}
+
+$(function () {
+  var catColors = {{ cat_colors| tojson }};
+  var selectedId;
+  var $input;
+  var $datetimePicker = $('#datetime-picker input');
+
+  $datetimePicker.combodate();
+
+  $("[data-toggle=datetime]").focus(function () {
+    $input = $(this);
+    var type = $(this).data('type');
+    var format = type == 'date' ? 'MM/DD/YYYY' : 'hh:mm A';
+    $datetimePicker.combodate('destroy');
+    $datetimePicker.combodate({
+      format: format,
+      template: format,
+      smartDays: true,
+      maxYear: 2030,
+      minYear: 2000,
+      firstItem: 'none',
+      customClass: 'custom-select',
+      value: new Date()
+    });
+    if ($input.val()) {
+      $datetimePicker.combodate('setValue', $input.val());
+    } else {
+      $datetimePicker.combodate('setValue', new Date());
+    }
+    $('#datetime-picker').fadeIn();
+  });
+
+  $('#datetime-picker, #btn-cancel').click(function() {
+    $('#datetime-picker').fadeOut();
+    return false;
+  });
+
+  $('#btn-clear').click(function () {
+    $input.val('');
+    $('#datetime-picker').fadeOut();
+    return false;
+  });
+
+  $('#btn-set').click(function () {
+    $input.val($datetimePicker.combodate('getValue'));
+    $('#datetime-picker').fadeOut();
+    return false;
+  });
+
+  $('#datetime-picker .custom-modal-content').click(function(e) {
+    e.stopPropagation();
+  });
+
+  ws_connect();
+
+  $('[name=weekly]').change(function () {
+    $('.weekly-random').prop('checked', false);
+  });
+
+  $('.weekly-random').change(function () {
+    $('.weekly-random').prop('checked', $(this).prop('checked'));
+
+    if ($(this).prop('checked')) {
+      $('[name=weekly]').each(function () {
+        $(this).prop('checked', false);
+      });
+    }
+  });
+
+  $('#schedule-survey').click(function () {
+    // Validate fields
+    if (!$('#survey-title').val()) {
+      log_resp({
+        'success': false,
+        'msg': 'Survey title not speficied.'
+      });
+      return;
+    }
+    if (!$('#category').val()) {
+      log_resp({
+        'success': false,
+        'msg': 'Invalid category specified.'
+      });
+      return;
+    }
+    if (!$('#department').val()) {
+      log_resp({
+        'success': false,
+        'msg': 'No departments specified.'
+      });
+      return;
+    }
+    var weekly = getWeeklyValue();
+    if (!weekly) {
+      log_resp({
+        'success': false,
+        'msg': 'Weekly date not speficied.'
+      });
+      return;
+    }
+    if (!$('#send-at').val()) {
+      log_resp({
+        'success': false,
+        'msg': 'Send time not speficied.'
+      });
+      return;
+    }
+    if (!$('#start-date').val()) {
+      log_resp({
+        'success': false,
+        'msg': 'No departments specified.'
+      });
+      return;
+    }
+    wscb.send({
+      cmd: 'schedule_survey',
+      id: selectedId,
+      title: $('#survey-title').val(),
+      category: $('#category').val(),
+      department: $('#department').val(),
+      order: $('#order').val(),
+      repeat: $('#repeat').val(),
+      start_date: $('#start-date').val(),
+      end_date: $('#end-date').val(),
+      send_at: $('#send-at').val(),
+      weekly: weekly,
+    }, function (resp) {
+      log_resp(resp);
+      if (resp.hasOwnProperty('success') && resp.success) {
+        var survey = resp.survey;
+        selectedId = survey.id;
+        $survey = $('.survey-clone').clone();
+        $survey.removeClass('survey-clone').addClass('survey-card').data({
+          'id': survey.id,
+          'title': survey.title,
+          'category': survey.category,
+          'department': survey.department,
+          'weekly': survey.weekly,
+          'send-at': survey.send_at,
+          'start-date': survey.start_date,
+          'end-date': survey.end_date,
+          'order': survey.question_order,
+          'repeat': survey.repeat,
+        });
+        $survey.attr('id', 'survey-' + survey.id);
+        $survey.find('.survey-title').text(survey.title);
+        $survey.find('.survey-category').text(survey.cat_name).css('backgroundColor', catColors[survey.cat_slug]);
+        $survey.find('.change-color').css('color', catColors[survey.cat_slug]);
+        $survey.find('.question-count').text(survey.question_count);
+        $survey.find('.days-active').text(survey.days_active > 0 ? survey.days_active : 0);
+        if (survey.receive_count == 0) {
+          $survey.find('.response-rate').text(0);
+        } else {
+          $survey.find('.response-rate').text(survey.receive_count / survey.sent_count * 100);
+        }
+        $survey.find('a').attr('href', "/survey_stats/" + survey.id);
+        if ($('#survey-' + survey.id).length) {
+          $('#survey-' + survey.id).replaceWith($survey);
+        } else {
+          $survey.prependTo('#survey-list');
+        }
+        $('html, body').animate({
+          scrollTop: $survey.offset().top - 150
+        });
+        resetInputs();
+      }
+    });
+  });
+
+  $('body').on('click', '.btn-edit-survey', function () {
+    $('#schedule-survey').text('Resume Survey');
+
+    var values = $(this).parents('.card').data();
+    selectedId = values.id;
+    $('#survey-title').val(values.title);
+    $('#category').val(values.category).trigger('change');
+    $('#department').val(values.department).trigger('change');
+    $('#send-at').val(values.sendAt);
+    $('#start-date').val(values.startDate);
+    if (values.endDate == 'None') {
+      $('#end-date').val('');
+    } else {
+      $('#end-date').val(values.endDate);
+    }
+    $('#order').val(values.order).trigger('change');
+    $('#repeat').val(values.repeat).trigger('change');
+    $('.weekly-random').prop('checked', false);
+      $('[name=weekly]').prop('checked', false);
+    if (values.weekly == 'random') {
+      $('.weekly-random').prop('checked', true);
+    } else {
+      $('[name=weekly]').each(function () {
+        if (values.weekly.includes($(this).val())) {
+          $(this).prop('checked', true);
+        }
+      });
+    }
+    $('html, body').animate({
+      scrollTop: $('#edit-schedule-section').show().offset().top - 150
+    });
+  });
+
+  $('#new-survey').click(function () {
+    $('#schedule-survey').text('Schedule Survey');
+
+    resetInputs();
+    $('html, body').animate({
+      scrollTop: $('#edit-schedule-section').show().offset().top - 150
+    });
+  });
+
+  $('body').on('click', '.copy-btn', function () {
+    var surveyId = $(this).parents('.survey-card').data('id');
+    wscb.send({
+      cmd: 'copy_survey',
+      id: surveyId
+    }, function (resp) {
+      log_resp(resp);
+      if (resp.hasOwnProperty('success') && resp.success) {
+        var survey = resp.survey;
+        $survey = $('.survey-clone').clone();
+        $survey.removeClass('survey-clone').addClass('survey-card').data({
+          'id': survey.id,
+          'title': survey.title,
+          'category': survey.category,
+          'department': survey.department,
+          'weekly': survey.weekly,
+          'send-at': survey.send_at,
+          'start-date': survey.start_date,
+          'end-date': survey.end_date,
+          'order': survey.question_order,
+          'repeat': survey.repeat,
+        });
+        $survey.attr('id', 'survey-' + survey.id);
+        $survey.find('.survey-title').text(survey.title);
+        $survey.find('.survey-category').text(survey.cat_name).css('backgroundColor', catColors[survey.cat_slug]);
+        $survey.find('.change-color').css('color', catColors[survey.cat_slug]);
+        $survey.find('.question-count').text(survey.question_count);
+        $survey.find('.days-active').text(survey.days_active > 0 ? survey.days_active : 0);
+        if (survey.receive_count == 0) {
+          $survey.find('.response-rate').text(0);
+        } else {
+          $survey.find('.response-rate').text(survey.receive_count / survey.sent_count * 100);
+        }
+        $survey.find('a').attr('href', "/survey_stats/" + survey.id);
+        if ($('#survey-' + survey.id).length) {
+          $('#survey-' + survey.id).replaceWith($survey);
+        } else {
+          $survey.prependTo('#survey-list');
+        }
+        $('html, body').animate({
+          scrollTop: $survey.offset().top - 150
+        });
+      }
+    });
+    return false;
+    // $(this).parents('.survey-card').find('.btn-edit-survey').click();
+    // selectedId = '';
+  });
+
+  $('body').on('click', '.trash-btn', function () {
+    selectedId = $(this).parents('.survey-card').data('id');
+    $('#delete-modal').modal('show');
+    return false;
+  });
+
+  $('#confirm-delete').click(function () {
+    wscb.send({
+      cmd: 'trash_survey',
+      id: selectedId
+    }, function (resp) {
+      log_resp(resp);
+      if (resp.hasOwnProperty('success') && resp.success) {
+        $('#survey-' + resp.id).remove();
+        resetInputs();
+      }
+    });
+    $('#delete-modal').modal('hide');
+  });
+
+  function getWeeklyValue() {
+    if ($('.weekly-random').prop('checked')) {
+      var weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      weekdays.sort(() => Math.random() - 0.5);
+      weekdays = weekdays.slice(0, 3);
+      return weekdays.join(', ');
+    }
+
+    var checked = [];
+    $('[name=weekly]').each(function () {
+      if ($(this).prop('checked')) {
+        checked.push($(this).val());
+      }
+    });
+    return checked.join(', ')
+  }
+
+  function resetInputs() {
+    selectedId = '';
+    $('#survey-title').val('');
+    $('#category').val(1).trigger('change');
+    $('#department').val(1).trigger('change');
+    $('.weekly-random').prop('checked', false);
+    $('[name=weekly]').prop('checked', false);
+    $('#send-at').val('09:30 AM');
+    var now = new Date();
+    $('#start-date').val((now.getMonth() < 9 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear());
+    $('#end-date').val('');
+    $('#order').val(1).trigger('change');
+    $('#repeat').val(7).trigger('change');
+  }
+
+  {% if category_id %}
+  resetInputs();
+  $('#category').val({{ category_id }}).trigger('change');
+  $('html, body').animate({
+    scrollTop: $('#edit-schedule-section').show().offset().top - 150
+  });
+  {% endif %}
+});
+</script>
+{% endblock %}

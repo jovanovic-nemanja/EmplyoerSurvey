@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block fulid_body %}
+<div class="d-flex flex-column pb-3 mb-4 mb-lg-5 align-items-center">
+  <h4 class="mt-0 mb-3 font-weight-bold">My Surveys</h4>
+  <div class="text-center page-description">
+    Organize, edit, and launch new surveys as key touch points in gathering business intelligence on your company’s overall performance and quality.
+  </div>
+</div>
+<div class="d-flex justify-content-center align-items-center flex-column flex-lg-row">
+  {% for category in categories %}
+  <div class="card text-center home-card dashboard-card border-top-primary align-self-stretch {% if not loop.last %} mr-0 mr-lg-4 mb-4 mb-lg-0 {% endif %}{% if not loop.first %} ml-0 ml-lg-2 {% endif %}" style="border-color: {{ cat_colors[category.cat_slug] }};">
+    <div class="card-body d-flex flex-column justify-content-between">
+      <div>
+        <h5 class="card-title">{{ category.cat_name }}</h5>
+        <p class="card-text">{{ category.description }}</p>
+      </div>
+      <div class="d-flex flex-column align-items-center mt-4">
+        <a href="/{{ category.cat_slug }}/questions" class="btn btn-primary btn-block btn-lg h62">
+          View All Questions
+        </a>
+        <a href="/schedule?category={{ category.id }}" class="btn btn-info btn-block btn-lg h62">
+          Schedule a Survey
+        </a>
+        <a href="/category_stats/{{ category.id }}" class="btn btn-primary btn-block btn-lg h62">
+          View Analytics
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,161 @@
+/* section main */
+.tagify {
+  width: 100%;
+  // max-width: 700px;
+  background: rgba(white, .8);
+}
+
+/* Suggestions items */
+.tagify__dropdown.users-list {
+  $avatar-size: 36px;
+  
+  font-size: 14px;
+  
+  .tagify__dropdown__item {
+    padding: .5em .7em;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 1em;
+    grid-template-areas: "avatar name"
+                           "avatar email";
+    
+    &:hover .tagify__dropdown__item__avatar-wrap {
+      transform: scale(1.2);
+    }
+    
+    &__avatar-wrap {
+      grid-area: avatar;
+      width: $avatar-size;
+      height: $avatar-size;
+      //border-radius: 50%;
+      overflow: hidden;
+      //background: #EEE;
+      transition: .1s ease-out;
+    }
+  }
+  
+  img {
+    width: 100%;
+    vertical-align: top;
+  }
+  
+  strong {
+    grid-area: name;
+    width: 100%;
+    align-self: center;
+    font-weight: 500;
+  }
+  
+  span {
+    grid-area: email;
+    width: 100%;
+    font-size: .9em;
+    opacity: .6;
+  }
+  
+  .addAll {
+    border-bottom: 1px solid #DDD;
+    gap: 0;
+  }
+}
+
+
+/* Tags items */
+.tagify__tag {
+  white-space: nowrap;
+  
+  &:hover .tagify__tag__avatar-wrap {
+    transform: scale(1.6) translateX(-10%);
+  }
+  
+  .tagify__tag__avatar-wrap {
+    width: 16px;
+    height: 20px;
+    white-space: normal;
+    //background: silver;
+    //border-radius: 50%;
+    margin-right: 5px;
+    transition: .12s ease-out;
+  }
+  
+  img {
+    width: 100%;
+    vertical-align: top;
+  }
+}
+
+
+/* section inviteUsers */
+
+.customLook {
+  --tag-bg: #0052BF;
+  --tag-hover: #CE0078;
+  --tag-text-color: #FFF;
+  --tags-border-color: silver;
+  --tag-text-color--edit: #111;
+  --tag-remove-bg: var(--tag-hover);
+  --tag-pad: .6em 1em;
+  --tag-inset-shadow-size: 1.3em;
+  --tag-remove-btn-bg--hover: black;
+  
+  display: inline-block;
+  min-width: 0;
+  border: none;
+}
+
+.customLook .tagify__tag {
+  margin-top: 0;
+}
+
+.customLook .tagify__tag > div {
+  border-radius: 25px;
+}
+
+/* Do not show the "remove tag" (x) button when only a single tag remains */
+.customLook .tagify__tag:only-of-type .tagify__tag__removeBtn {
+  display: none;
+}
+
+.customLook .tagify__tag__removeBtn {
+  opacity: 0;
+  transform: translateX(-6px) scale(.5);
+  margin-left: -3ch;
+  transition: .12s;
+}
+
+.customLook .tagify__tag:hover .tagify__tag__removeBtn {
+  transform: none;
+  opacity: 1;
+  margin-left: -1ch;
+}
+
+.customLook + button {
+  color: #0052BF;
+  font: bold 1.4em/1.65 Arial;
+  border: 0;
+  background: none;
+  box-shadow: 0 0 0 2px inset currentColor;
+  border-radius: 50%;
+  width: 1.65em;
+  height: 1.65em;
+  cursor: pointer;
+  outline: none;
+  transition: .1s ease-out;
+  margin: 0 0 0 5px;
+  vertical-align: top;
+}
+
+.customLook + button:hover {
+  box-shadow: 0 0 0 5px inset currentColor;
+}
+
+.customLook .tagify__input {
+  display: none;
+}
+
+.tagify__input {
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+}

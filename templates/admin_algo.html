@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block head_head %}
+<!-- DataTables -->
+<link href="/urora/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
+<link href="/urora/plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
+<!-- Responsive datatable examples -->
+<link href="/urora/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
+
+
+{% endblock head_head %}
+
+{% block head %}
+
+{% endblock head %}
+{% block body %}
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <div class="card m-b-30">
+      <div class="card-body table-responsive">
+        <h5 class="header-title">Orgs</h5>
+        <p class="text-muted"></p>
+        <table class="table orgs_table table-notopborder" id="orgs_table" style="width: 100%"></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <div class="card m-b-30">
+      <div class="card-body table-responsive">
+        <h5 class="header-title">Model Controls</h5>
+        <p class="text-muted"></p>
+        <div class="row">
+          <div class="col-lg-6 col-sm-6">
+        <label for="var1">First variable</label>
+        <select id="var1" class="form-control">
+          <option value="answer">Answer</option>
+          <option value="answer_rate">Answer rate</option>
+          <option value="total_respondants">Total respondants</option>
+          <option value="total_recipients">Total recipients</option>
+          <option value="total_recipients">Category factor</option>
+        </select>
+            </div>
+          <div class="col-lg-6 col-sm-6">
+        <label for="operator1">Operator</label>
+        <select id="operator1" class="form-control">
+          <option value="*">*</option>
+          <option value="/">/</option>
+          <option value="*">+</option>
+          <option value="*">-</option>
+        </select>
+        <select id="answer_type" class="form-control">
+          <option value="answer">Answer</option>
+          <option value="answer_rate">Answer rate</option>
+          <option value="total_respondants">Total respondants</option>
+          <option value="total_recipients">Total recipients</option>
+          <option value="total_recipients">Category factor</option>
+        </select>
+            </div>
+          <div class="col-lg-6 col-sm-6">
+        <input type="number" id="var2" class="form-control">
+            </div>
+          <div class="col-lg-6 col-sm-6">
+        <BR><BR>
+        <p align="right"><button class="btn btn-primary btn-lg">Save</button></p>
+            </div>
+          </div>
+
+        <div class="">
+<!--          <table class="table table-questions table-notopborder" id="table-questions">-->
+            <thead>
+            <tr>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!--end row-->
+
+
+{% endblock body %}
+
+{% block body_foot %}
+<script src="/js/admin_algo.js"></script>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="d-flex flex-column pb-3 mb-4 mb-md-5 align-items-center">
+  <h4 class="m-0 font-weight-bold">{{ stats_data.cat_name }}</h4>
+</div>
+
+<div class="row mb-5">
+  <div class="col-md-4 col-sm-6">
+    <div class="card home-card p-3 h-100 text-center">
+      <div class="card-body table-responsive p-0">
+        <h5 class="font-32 font-weight-bold text-primary">{{ stats_data.question_count }}</h5>
+        <hr>
+        <h5 class="font-16 text-info">Survey Questions</h5>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-sm-6 mt-4 mt-sm-0">
+    <div class="card home-card p-3 h-100 text-center">
+      <div class="card-body table-responsive p-0">
+        <h5 class="font-32 font-weight-bold text-primary d-flex justify-content-center">
+          <span>
+            {% if stats_data.sent_count == 0 %}
+              0
+            {% else %}
+              {{ (stats_data.receive_count / stats_data.sent_count * 100)|int }}
+            {% endif %}
+          </span>
+          <span class="align-middle" style="font-size: 25px;">%</span>
+        </h5>
+        <hr>
+        <h5 class="font-16 text-info">Response Rate</h5>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-sm-6 mt-4 mt-md-0">
+    <div class="card home-card p-3 h-100 text-center">
+      <div class="card-body table-responsive p-0">
+        <h5 class="font-32 font-weight-bold text-primary">{{ "%.1f"|format(stats_data.average|float) }}</h5>
+        <hr>
+        <h5 class="font-16 text-info">Average Score</h5>
+      </div>
+    </div>
+  </div>
+</div>
+{% for question_id in chart_data %}
+<div class="card card-home mb-3">
+  <h5 class="m-0 p-4 font-weight-bold">{{ chart_data[question_id]['question'] }}</h5>
+  <div id="container{{ question_id }}"></div>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block body_foot %}
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script>
+var chartData = {{ chart_data|tojson }};
+
+for (var questionId in chartData) {
+  var data = chartData[questionId].data;
+  var cntData = [];
+  var total = 0;
+  for (score in data) {
+    total += data[score];
+  }
+  for (score=1; score<11; score++) {
+    if (data[score]) {
+      cntData.push(Math.round(data[score] / total * 100));
+    } else {
+      cntData.push(0);
+    }
+  }
+  Highcharts.chart(`container${questionId}`, {
+    chart: {
+      type: 'column'
+    },
+    title: {
+      text: ''
+    },
+    legend: {
+      enabled: false
+    },
+    credits: {
+      enabled: false
+    },
+    xAxis: {
+      categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      crosshair: true,
+    },
+    yAxis: {
+      min: 0,
+      max: 100,
+      title: {
+        text: ''
+      },
+    },
+    tooltip: {
+      headerFormat: '<span style="font-size:10px">{point.y} %</span>',
+      pointFormat: '',
+      footerFormat: '',
+      shared: true,
+      useHTML: true
+    },
+    plotOptions: {
+      column: {
+        pointPadding: 0.2,
+        borderWidth: 0
+      }
+    },
+    series: [{
+      name: 'Score',
+      data: cntData
+    }]
+  });
+}
+</script>
+{% endblock %}

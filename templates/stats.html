@@ -1,0 +1,567 @@
+{% extends "base.html" %}
+
+{% block head_head %}
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+{% endblock %}
+
+{% block fulid_body %}
+<!-- section: survey-questions -->
+<div class="d-flex flex-column pb-3 mb-4 mb-lg-5 align-items-center">
+  <h4 class="mt-0 mb-3 font-weight-bold">{{ auth.company_name }} HiyerScore Analytics</h4>
+  <div class="text-center page-description">
+    Use the analytics below to explore each HiyerScore index, dive into potential management levers, and track changes in your HiyerScore over time and how they compare your management initiatives.
+  </div>
+</div>
+
+<!-- section: survey-questions -->
+<div class="d-flex flex-column flex-md-row align-items-stretch m-b-30">
+  <div class="card home-card px-4 py-3 border-top-primary flex-shrink-0 mr-0 mr-md-4 mr-xl-5 rounded-0">
+    <div class="card-title text-center">
+      <h5 class="text-primary font-18 mt-0 font-weight-bold">{{ auth.company_name }}’s HiyerScore</h5>
+      <div class="font-16">Here is your company’s composite score.</div>
+    </div>
+    <div class="card-body p-0">
+      <canvas id="hiyer-score-donut"></canvas>
+    </div>
+  </div>
+  <div class="card home-card w-100 mt-4 mt-md-0" style="border-radius: 18px; box-shadow: 0px 2px 10px rgb(0 0 0 / 7%);">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-end my-2 px-0 px-md-4">
+      <div>
+        <h4 class="font-weight-bold font-weight-bold text-left pl-3 text-center text-md-left">Your HiyerScore History</h4>
+        <!-- <h5 class="font-18 font-weight-bold text-left pl-3 text-center text-md-left">Score over time</h5> -->
+        <div class="font-16 text-left pl-3 text-center text-md-left">Track your company’s index scoring over time.</div>
+      </div>
+      <div class="mt-2 mt-md-0">
+        <ul id="select-range">
+          <li class="active" data-range="7d">7D</li>
+          <li data-range="1m">1M</li>
+          <li data-range="3m">3M</li>
+          <li data-range="1y">1Y</li>
+          <!-- <li data-range="all">ALL</li> -->
+          <li data-range="custom">
+            <div id="date-range-picker">
+              <input type="text" hidden>
+              <i class="fa fa-calendar"></i>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="score-line-chart" style="height: 266px;"></div>
+    <div style="
+      width: 100px;
+      height: 30px;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: white;
+      border-radius: 18px;
+    "></div>
+  </div>
+</div>
+
+<div class="row m-b-30 flex-xxl-nowrap">
+  <div class="col-xxl-auto col-xl-8 col-12">
+    <div class="row">
+      <div class="col-xxl-auto col-xl-3 col-lg-3 col-6 pr-xxl-24 pr-2 pr-md-3">
+        <div class="card home-card p-2 h-100 chart-index-card rounded-0">
+          <div class="card-body table-responsive no-gutter">
+            <div style="margin: 5px; text-align: center; color: #FF5B61; font-weight: bold">
+              <h5 class="font-18">Employee Performance Index</h5>
+            </div>
+            <div id="tag-donut-1" style="height: 200px;" onclick="location.href='/category_stats/1'"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xxl-auto col-xl-3 col-lg-3 col-6 pr-xxl-24 pl-2 pl-md-3">
+        <div class="card home-card p-2 h-100 chart-index-card rounded-0">
+          <div class="card-body table-responsive no-gutter">
+            <div style="margin: 5px; text-align: center; color: #6665DD; font-weight: bold">
+              <h5 class="font-18">Peer Performance Index</h5>
+            </div>
+            <div id="tag-donut-2" style="height: 200px;" onclick="location.href='/category_stats/2'"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xxl-auto col-xl-3 col-lg-3 col-6 pr-xxl-24 mt-4 mt-lg-0 pr-2 pr-md-3">
+        <div class="card home-card p-2 h-100 chart-index-card rounded-0">
+          <div class="card-body table-responsive no-gutter">
+            <div style="margin: 5px; text-align: center; color: #29E7CD; font-weight: bold">
+              <h5 class="font-18">Managed Up Performance Index</h5>
+            </div>
+            <div id="tag-donut-3" style="height: 200px;" onclick="location.href='/category_stats/3'"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xxl-auto col-xl-3 col-lg-3 col-6 pr-xxl-24 mt-4 mt-lg-0 pl-2 pl-md-3">
+        <div class="card home-card p-2 h-100 chart-index-card rounded-0">
+          <div class="card-body table-responsive no-gutter">
+            <div style="margin: 5px; text-align: center; color: #FF5BC3; font-weight: bold">
+              <h5 class="font-18">Corporate Quality Index</h5>
+            </div>
+            <div id="tag-donut-4" style="height: 200px;" onclick="location.href='/category_stats/4'"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xxl-auto col-xl-4 col-12 mt-4 mt-xl-0 pl-xxl-6">
+    <div class="row h-100 flex-xxl-nowrap">
+      <div class="col-4 col-xxl-auto pr-0 pr-md-3">
+        <div class="card home-card p-3 h-100 text-center state-card">
+          <div class="card-body table-responsive p-0">
+            <h1 class="font-32 font-weight-bold text-primary">{{ question_count }}</h1>
+            <hr>
+            <h5 class="font-12">Survey Questions</h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-4 col-xxl-auto pr-0 pr-md-3">
+        <div class="card home-card p-3 h-100 text-center state-card">
+          <div class="card-body table-responsive p-0">
+            <h1 class="font-32 font-weight-bold text-primary">{{ response_rate['total'] }}%</h1>
+            <hr>
+            <h5 class="font-12">Response Rate</h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-4 col-xxl-auto">
+        <div class="card home-card p-3 h-100 text-center state-card">
+          <div class="card-body table-responsive p-0">
+            <h1 class="font-32 font-weight-bold text-primary">{{ employee_count }}</h1>
+            <hr>
+            <h5 class="font-12">Active Employees</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row m-b-30 flex-xxl-nowrap">
+  <div class="col-xxl-auto col-xl-8 col-12">
+    <div class="row">
+      <div class="col-xxl-auto col-xl-3 col-lg-3 col-6 pr-xxl-24 pr-2 pr-md-3 m-b-30 mb-lg-0">
+        <div class="card home-card h-100 rate-card overflow-hidden {% if employee_rates|length > 4 %}p-2 pb-5 px-md-4 pt-md-3{% else %}px-4 py-3{% endif %}">
+          <h5 class="text-primary text-center font-weight-bold font-16 font-xxl-18 mt-0 mb-3">
+            Employees <br>by Response Rate
+          </h5>
+          <div class="d-flex justify-content-center text-center">
+            <div class="d-flex flex-column">
+              {% for rate in (employee_rates|sort(reverse=true, attribute='response_rate'))[:4] %}
+              <div class="department-rate-item {% if not loop.last %}mb-2{% endif %} {% if not loop.first %}mt-1{% endif %}">
+                <div class="mb-1 font-14 text-truncate" style="color: #28B5E1">
+                  {{ rate.first_name }} {{ rate.last_name }}
+                </div>
+                <div class="mb-0 font-12 text-truncate" style="color: #696D6E">
+                  {{ rate.response_rate|int }}% Completion
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% if employee_rates|length > 4 %}
+          <div class="position-absolute card-mask"></div>
+          <a href="/response_rate#employee" class="position-absolute view-all text-center font-14 pb-3 pb-md-4">View All</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-xxl-auto col-xl-3 col-lg-3 col-6 pr-xxl-24 pl-2 pl-md-3 m-b-30 mb-lg-0">
+        <div class="card home-card h-100 rate-card overflow-hidden {% if employee_rates|length > 4 %}p-2 pb-5 px-md-4 pt-md-3{% else %}px-4 py-3{% endif %}">
+          <h5 class="text-primary text-center font-weight-bold font-16 font-xxl-18 mt-0 mb-3">
+            Employees <br>by Peer Review
+          </h5>
+          <div class="d-flex justify-content-center text-center">
+            <div class="d-flex flex-column">
+              {% for rate in (employee_rates|sort(reverse=true, attribute='peer_review'))[:4] %}
+              <div class="department-rate-item {% if not loop.last %}mb-2{% endif %} {% if not loop.first %}mt-1{% endif %}">
+                <div class="mb-1 font-14 text-truncate" style="color: #28B5E1">
+                  {{ rate.first_name }} {{ rate.last_name }}
+                </div>
+                <div class="mb-0 font-12 text-truncate" style="color: #696D6E">
+                  {{ rate.peer_review|int }}% Rating
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% if employee_rates|length > 4 %}
+          <div class="position-absolute card-mask"></div>
+          <a href="/response_rate#employee" class="position-absolute view-all text-center font-14 pb-3 pb-md-4">View All</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-xxl-auto col-xl-3 col-lg-3 col-6 pr-xxl-24 pr-2 pr-md-3 m-b-30 mb-lg-0">
+        <div class="card home-card h-100 rate-card overflow-hidden {% if employee_rates|length > 4 %}p-2 pb-5 px-md-4 pt-md-3{% else %}px-4 py-3{% endif %}">
+          <h5 class="text-primary text-center font-weight-bold font-16 font-xxl-18 mt-0 mb-3">
+            Departments <br>by Response Rate
+          </h5>
+          <div class="d-flex justify-content-center text-center">
+            <div class="d-flex flex-column">
+              {% for rate in (department_rates|sort(reverse=true, attribute='response_rate'))[:4] %}
+              <div class="department-rate-item {% if not loop.last %}mb-2{% endif %} {% if not loop.first %}mt-1{% endif %}">
+                <div class="mb-1 font-14 text-truncate" style="color: #28B5E1">
+                  {{ rate.dept_name }}
+                </div>
+                <div class="mb-0 font-12 text-truncate" style="color: #696D6E">
+                  {{ rate.response_rate|int }}% Completion
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% if department_rates|length > 4 %}
+          <div class="position-absolute card-mask"></div>
+          <a href="/response_rate#department" class="position-absolute view-all text-center font-14 pb-3 pb-md-4">View All</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-xxl-auto col-xl-3 col-lg-3 col-6 pr-xxl-24 pl-2 pl-md-3 m-b-30 mb-lg-0">
+        <div class="card home-card h-100 rate-card overflow-hidden {% if employee_rates|length > 4 %}p-2 pb-5 px-md-4 pt-md-3{% else %}px-4 py-3{% endif %}">
+          <h5 class="text-primary text-center font-weight-bold font-16 font-xxl-18 mt-0 mb-3">
+            Departments <br>by Peer Review
+          </h5>
+          <div class="d-flex justify-content-center text-center">
+            <div class="d-flex flex-column">
+              {% for rate in (department_rates|sort(reverse=true, attribute='peer_review'))[:4] %}
+              <div class="department-rate-item {% if not loop.last %}mb-2{% endif %} {% if not loop.first %}mt-1{% endif %}">
+                <div class="mb-1 font-14 text-truncate" style="color: #28B5E1">
+                  {{ rate.dept_name }}
+                </div>
+                <div class="mb-0 font-12 text-truncate" style="color: #696D6E">
+                  {{ rate.peer_review|int }}% Rating
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% if department_rates|length > 4 %}
+          <div class="position-absolute card-mask"></div>
+          <a href="/response_rate#department" class="position-absolute view-all text-center font-14 pb-3 pb-md-4">View All</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-4 col-lg-6 col-md-12 d-none">
+    <div class="card home-card">
+      <div class="card-body p-0" style="height: 300px">
+        <div class="response_rot ct-chart ct-square" style="overflow: hidden"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-md-12 col-xl-5">
+    </div>
+    <!-- section icon search -->
+    <div id="myOverlay" class="overlay">
+      <div class="closebtn">
+        <i class="fa fa-times fa-lg close-icon" title="Close Overlay" style="color: #FFFFFF"></i>
+      </div>
+      <div class="overlay-content">
+        <div>
+          <h3 class="text-white">Choose an icon</h3>
+          <input id="iconsIn" name="iconsIn" value="" type="hidden">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block body_foot %}
+<script>
+  var tagifyIcon,
+    tagifyQtags;
+  responseRate = {{ response_rate | tojson }};
+
+  var slugList = ['performance', 'peer-review', 'managed-up', 'cqi'];
+  var chart;
+  var dateRange = '7d', startDate, endDate;
+
+  var data = [];
+  var dataSeries = {};
+  var dataPoints = [];
+  for (var i = 7; i >= 0; i--) {
+    var date = new Date();
+    date.setDate(date.getDate() - i);
+    dataPoints.push({
+      x: date,
+      y: 0
+    });
+  }
+  dataSeries.data = dataPoints;
+  data.push(Object.assign({ name: 'Employee Performance Index' }, dataSeries));
+  data.push(Object.assign({ name: 'Peer Performance Index' }, dataSeries));
+  data.push(Object.assign({ name: 'Managed Up Performance Index' }, dataSeries));
+  data.push(Object.assign({ name: 'Corporate Quality Index' }, dataSeries));
+
+  function initChart() {
+    wscb.send({
+      cmd: 'score_data',
+      date_range: dateRange,
+      start_date: startDate,
+      end_date: endDate,
+    }, function (resp) {
+      var dayToMillisecond = 24 * 3600 * 1000;
+      for (var i = 0; i < 4; i++) {
+        data[i].data = [];
+        if (dateRange == 'custom') {
+          var dateObj = new Date(startDate);
+        } else {
+          var dateObj = new Date();
+          if (dateRange == '7d') {
+            dateObj.setDate(dateObj.getDate() - 7);
+          } else if (dateRange == '1m') {
+            dateObj.setMonth(dateObj.getMonth() - 1);
+          } else if (dateRange == '3m') {
+            dateObj.setMonth(dateObj.getMonth() - 3);
+          } else if (dateRange == '1y') {
+            dateObj.setFullYear(dateObj.getFullYear() - 1);
+          }
+        }
+        for (var diff = 0; ((dateRange == 'custom' ? new Date(endDate) : new Date()) - dateObj) > -dayToMillisecond;) {
+          var dateString = dateObj.getFullYear() + '-' + (dateObj.getMonth() + 1) + '-' + dateObj.getDate();
+          result = resp['result'][dateString + slugList[i]];
+          if (result) {
+            data[i].data.push({
+              x: new Date(dateObj),
+              y: result.total / result.cnt * 10
+            });
+          } else if (diff == 0) {
+            var yVal = 0;
+            if (resp.min_scores[slugList[i]]) {
+              yVal = resp.min_scores[slugList[i]].total / resp.min_scores[slugList[i]].cnt * 10;
+            }
+            data[i].data.push({
+              x: new Date(dateObj),
+              y: yVal
+            });
+          } else {
+            data[i].data.push({
+              x: new Date(dateObj),
+              y: data[i].data[data[i].data.length - 1]
+            });
+          }
+          dateObj.setDate(dateObj.getDate() + 1);
+        }
+        if (chart.series[i]) {
+          chart.series[i].setData(data[i].data);
+        } else {
+          chart.addSeries(data[i]);
+        }
+      }
+    });
+  }
+
+  $(function () {
+    ws_connect(initChart);
+
+    chart = Highcharts.chart('score-line-chart', {
+      colors: [
+        "#FF5B61",
+        "#636F9A",
+        "#29E7CD",
+        "#FF5BC3",
+      ],
+      title: {
+        text: ''
+      },
+      chart: {
+        type: 'line'
+      },
+      xAxis: {
+        type: 'datetime',
+      },
+      yAxis: {
+        title: {
+          text: '',
+        },
+      },
+      series: [],
+    });
+
+    $('#select-range li').click(function () {
+      if ($(this).hasClass('active')) {
+        return;
+      }
+      $('#select-range li').removeClass('active');
+      $(this).addClass('active');
+      dateRange = $(this).data('range');
+      if (dateRange != 'custom') {
+        initChart();
+      }
+    });
+
+    $('#date-range-picker').daterangepicker({
+      "showDropdowns": true,
+      ranges: {
+        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+        'Last 90 Days': [moment().subtract(89, 'days'), moment()],
+        'Last 180 Days': [moment().subtract(179, 'days'), moment()],
+        'Last 365 Days': [moment().subtract(364, 'days'), moment()],
+      },
+      "showCustomRangeLabel": false,
+      "alwaysShowCalendars": true,
+      "startDate": moment().subtract(6, 'days'),
+      "endDate": moment(),
+      "opens": "left"
+    }, function (start, end, label) {
+      startDate = start.format('YYYY-MM-DD');
+      endDate = end.format('YYYY-MM-DD');
+      initChart();
+    });
+  });
+</script>
+<script src="/js/lib/morris.min.js"></script>
+<script src="/urora/plugins/moment/moment.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts-nightly@5.1.2-dev.20210512/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="/js/stats.js?version=20210627"></script>
+<script>
+  var config = {
+    type: 'doughnut',
+    data: {
+      labels: [
+        "Employee Performance Index",
+        "Peer Performance Index",
+        "Managed Up Performance Index",
+        "Corporate Quality Index"
+      ],
+      datasets: [{
+        data: [300, 50, 100, 50],
+        backgroundColor: [
+          "#FF5B61",
+          "#6665DD",
+          "#29E7CD",
+          "#FF5BC3"
+        ],
+        hoverBackgroundColor: [
+          "#FF5B61",
+          "#6665DD",
+          "#29E7CD",
+          "#FF5BC3"
+        ]
+      }]
+    },
+    options: {
+      elements: {
+        center: {
+          text: '49%',
+          color: '#f65014',
+          fontStyle: 'Arial',
+          fontWeight: 'bold',
+          sidePadding: 40,
+          minFontSize: 40,
+          lineHeight: 40
+        }
+      },
+      cutout: '70%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+        }
+      },
+    },
+    plugins: [{
+      beforeDraw: function(chart) {
+        if (chart.config.options.elements.center) {
+          // Get ctx from string
+          var ctx = chart.ctx;
+
+          // Get options from the center object in options
+          var centerConfig = chart.config.options.elements.center;
+          var fontStyle = centerConfig.fontStyle || 'Arial';
+          var txt = centerConfig.text;
+          var color = centerConfig.color || '#000';
+          var maxFontSize = centerConfig.maxFontSize || 75;
+          var sidePadding = centerConfig.sidePadding || 20;
+          var sidePaddingCalculated = (sidePadding / 100) * (chart.innerRadius * 2)
+          // Start with a base font of 30px
+          ctx.font = "40px " + fontStyle;
+
+          // Get the width of the string and also the width of the element minus 10 to give it 5px side padding
+          var stringWidth = ctx.measureText(txt).width;
+          var elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated;
+
+          // Find out how much the font can grow in width.
+          var widthRatio = elementWidth / stringWidth;
+          var newFontSize = Math.floor(30 * widthRatio);
+          var elementHeight = (chart.innerRadius * 2);
+
+          // Pick a new font size so it will not be larger than the height of label.
+          var fontSizeToUse = Math.min(newFontSize, elementHeight, maxFontSize);
+          var minFontSize = centerConfig.minFontSize;
+          var lineHeight = centerConfig.lineHeight || 25;
+          var wrapText = false;
+
+          if (minFontSize === undefined) {
+            minFontSize = 20;
+          }
+
+          if (minFontSize && fontSizeToUse < minFontSize) {
+            fontSizeToUse = minFontSize;
+            wrapText = true;
+          }
+
+          // Set font settings to draw it correctly.
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          var centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
+          var centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
+          ctx.font = fontSizeToUse + "px " + fontStyle;
+          ctx.fillStyle = color;
+
+          if (!wrapText) {
+            ctx.fillText(txt, centerX, centerY);
+            return;
+          }
+
+          var words = txt.split(' ');
+          var line = '';
+          var lines = [];
+
+          // Break words up into multiple lines if necessary
+          for (var n = 0; n < words.length; n++) {
+            var testLine = line + words[n] + ' ';
+            var metrics = ctx.measureText(testLine);
+            var testWidth = metrics.width;
+            if (testWidth > elementWidth && n > 0) {
+              lines.push(line);
+              line = words[n] + ' ';
+            } else {
+              line = testLine;
+            }
+          }
+
+          // Move the center up depending on line height and number of lines
+          centerY -= (lines.length / 2) * lineHeight;
+
+          for (var n = 0; n < lines.length; n++) {
+            ctx.fillText(lines[n], centerX, centerY);
+            centerY += lineHeight;
+          }
+          //Draw text in center
+          ctx.fillText(line, centerX, centerY);
+        }
+      }
+    }]
+  };
+
+  var ctx = document.getElementById("hiyer-score-donut").getContext("2d");
+  new Chart(ctx, config);
+</script>
+{% endblock %}

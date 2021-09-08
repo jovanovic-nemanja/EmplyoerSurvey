@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- section <head> -->
+<head>
+  <meta charset="utf-8"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" name="viewport">
+  <title>{{ENV.SITE_NAME}}{% if page_title is defined %} - {{page_title}}{% endif %}</title>
+  <meta content="Employer Surveys" name="description"/>
+  <meta content="Perceptively" name="author"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/icons/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/images/icons/safari-pinned-tab.svg" color="#5bbad5">
+  <link rel="shortcut icon" href="/images/icons/favicon.ico">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="msapplication-config" content="/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+
+  {% block head_head %}
+  {% endblock head_head %}
+  <link rel="stylesheet" href="/js/lib/jquery-ui-1.12.1/jquery-ui.min.css">
+
+  <!-- section tagify_css -->
+  <link rel='stylesheet' href='/js/node_modules/@yaireo/tagify/dist/tagify.css'>
+
+  <!-- section h_styles -->
+  <link href="/urora/plugins/jvectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet">
+  <link href="/urora/plugins/chartist/css/chartist.min.css" rel="stylesheet">
+  <link href="/urora/plugins/morris/morris.css" rel="stylesheet">
+  <link href="/urora/plugins/metro/MetroJs.min.css" rel="stylesheet">
+
+  <link href="/urora/plugins/carousel/owl.carousel.min.css" rel="stylesheet">
+  <link href="/urora/plugins/carousel/owl.theme.default.min.css" rel="stylesheet">
+
+  <link href="/urora/plugins/animate/animate.css" rel="stylesheet" type="text/css">
+  <!-- <link href="/js/lib/bootstrap-4.6.0-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"> -->
+  <link href="/urora/css/bootstrap-material-design.min.css" rel="stylesheet" type="text/css">
+  <link href="/urora/scss/icons.css" rel="stylesheet" type="text/css">
+  <link href="/urora/scss/style.css?version=20210627" rel="stylesheet" type="text/css">
+  <link href="/css/common.css" rel="stylesheet">
+
+  <link href="/images/icons/fap/css/fontawesome.min.css">
+  <link href="/images/icons/fap/css/all.min.css">
+
+  <!-- <link href="/urora/plugins/select2/select2.min.css" rel="stylesheet" type="text/css" /> -->
+  <link rel="stylesheet" href="/js/lib/bootstrap-select-1.13.14/css/bootstrap-select.min.css">
+
+  <link rel="stylesheet" type="text/css" href="/js/node_modules/@yaireo/dragsort/dist/dragsort.css">
+
+  <!-- section h_scripts -->
+  <script src="/js/lib/jquery-3.5.1.js"></script>
+  <script>
+    window.jQuery = window.$ = jQuery
+  </script>
+<!--  <script src="/js/lib/bootstrap-4.6.0-dist/js/bootstrap.bundle.min.js"></script>-->
+  <script src="/js/lib/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+  <script src="/js/lib/wscb.js"></script>
+  <script src="/urora/js/popper.min.js"></script>
+  <script src="/urora/js/bootstrap-material-design.js"></script>
+  <script src="/urora/js/modernizr.min.js"></script>
+  <script src="/urora/js/detect.js"></script>
+  <script src="/urora/js/fastclick.js"></script>
+  <script src="/urora/js/jquery.slimscroll.js"></script>
+  <script src="/urora/js/jquery.blockUI.js"></script>
+  <script src="/urora/js/waves.js"></script>
+  <script src="/urora/js/jquery.nicescroll.js"></script>
+  <script src="/urora/js/jquery.scrollTo.min.js"></script>
+
+  <script src="/urora/plugins/carousel/owl.carousel.min.js"></script>
+
+  <script src="/urora/plugins/peity/jquery.peity.min.js"></script>
+  <script src="/urora/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
+  <script src="/urora/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+  <script src="/urora/plugins/chartist/js/chartist.min.js"></script>
+  <script src="/urora/plugins/chartist/js/chartist-plugin-tooltip.min.js"></script>
+  <script src="/urora/plugins/metro/MetroJs.min.js"></script>
+  <script src="/urora/plugins/raphael/raphael.min.js"></script>
+  <script src="/urora/plugins/fullcalendar/vanillaCalendar.js"></script>
+  {% if menu_padding_off is defined and menu_padding_off %}
+  <style>
+    .wrapper {
+      padding-top: 0;
+    }
+  </style>
+  {% endif %}
+
+  {% block head %}
+  {% endblock head %}
+</head>
+
+<body>
+
+<!-- Loader -->
+<div id="preloader">
+  <div id="status">
+    <div class="spinner"></div>
+  </div>
+</div>
+
+
+
+<!-- section Top Bar-->
+<header id="topnav">
+  <div class="topbar-main d-flex justify-content-center align-items-center">
+    <div class="container-fluid">
+      <div class="d-flex justify-content-between align-items-center">
+        <!-- Logo container-->
+        <div class="">
+          <!-- Text Logo -->
+          <!--<a href="/" class="logo">-->
+          <!--Urora-->
+          <!--</a>-->
+          <!-- Image Logo -->
+          <a href="/">
+            <div class="logo-small"></div>
+          </a>
+
+        </div>
+        <!-- End Logo container-->
+
+        <div class="menu-extras topbar-custom">
+
+          <ul class="list-inline float-right mb-0">
+            {% if auth is defined and auth['logged_in'] %}
+            {% if auth.is_employer %}
+            <li class="list-inline-item d-none d-lg-inline-block">
+              <a href="/dash" {% if this_page|safe == "/dash" %} class="active-page" {% endif %}>Dashboard</a>
+            </li>
+            <li class="list-inline-item d-none d-lg-inline-block">
+              <a href="/bank" {% if this_page|safe == "/bank" %} class="active-page" {% endif %}>Question Bank</a>
+            </li>
+            <li class="list-inline-item d-none d-lg-inline-block">
+              <a href="/stats" {% if this_page|safe == "/stats" %} class="active-page" {% endif %}>
+              HiyerScore&trade;
+              </a>
+            </li>
+            <li class="list-inline-item d-none d-lg-inline-block">
+              <a href="/schedule" class="btn btn-primary btn-lg mockup mb-0" id="btn-create-survey">
+                Surveys
+              </a>
+            </li>
+            {% else %}
+            <li class="list-inline-item">
+              <a href="/s" class="btn btn-primary btn-md mockup mb-0" id="btn-answer-question">
+                Answer Questions
+              </a>
+            </li>
+            {% endif %}
+            <li class="list-inline-item dropdown notification-list d-none">
+              <a aria-expanded="false" aria-haspopup="false" class="nav-link dropdown-toggle arrow-none waves-effect"
+                data-toggle="dropdown"
+                href="#" role="button">
+                <i class="ti-bell noti-icon"></i>
+                <span class="badge badge-success a-animate-blink noti-icon-badge notify_cnt"></span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right dropdown-arrow dropdown-menu-lg">
+                <div class="dropdown-item noti-title">
+                  <h5><span id="notify_cnt" class="badge badge-danger float-right notify_cnt">0</span>Notifications</h5>
+                </div>
+
+                <div class="noti_container">
+
+                </div>
+
+
+                <!-- item-->
+                <!--<a class="dropdown-item notify-item" href="javascript:void(0);">
+                  <div class="notify-icon bg-success"><i class="mdi mdi-message"></i></div>
+                  <p class="notify-details"><b>New Message received</b><small class="text-muted">You have
+                    87 unread messages</small></p>
+                </a>-->
+
+                <!-- item-->
+                <!--<a class="dropdown-item notify-item" href="javascript:void(0);">
+                  <div class="notify-icon bg-warning"><i class="fa fa-cogs"></i></div>
+                  <p class="notify-details"><b>Task Complete</b><small class="text-muted">Your
+                    weekly analytics are ready for you.</small></p>
+                </a>-->
+
+                <!-- All-->
+                <!--<a class="dropdown-item notify-item" href="javascript:void(0);">
+                  View All
+                </a>-->
+
+              </div>
+            </li>
+            {% endif %}
+            <li class="list-inline-item dropdown align-middle">
+              <div class="dropdown notification-list nav-pro-img">
+                <a aria-expanded="false" aria-haspopup="false"
+                  class="navbar-toggle dropdown-toggle nav-link d-block py-1" data-toggle="dropdown"
+                  href="#" role="button">
+                  <div class="three-lines">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right profile-dropdown">
+                  <!-- item-->
+                  <div class="dropdown-item noti-title">
+                    <h5 class="text-center">Welcome, {% if auth is defined and auth['logged_in'] %}{{auth.username}}{% else %}Guest{% endif %}</h5>
+                  </div>
+                  {% if auth is defined and auth['logged_in'] %}
+                  {% if auth.is_employer %}
+                  <a class="dropdown-item d-flex d-lg-none" href="/dash">
+                    <i class="mdi mdi-view-dashboard m-r-5 text-muted"></i> Dashboard
+                  </a>
+                  <a class="dropdown-item d-flex d-lg-none" href="/bank">
+                    <i class="mdi mdi-bank m-r-5 text-muted"></i> Question Bank
+                  </a>
+                  <a class="dropdown-item d-flex d-lg-none" href="/stats">
+                    <i class="mdi mdi-chart-areaspline m-r-5 text-muted"></i> HiyerScore&trade;
+                  </a>
+                  <a class="dropdown-item d-flex d-lg-none" href="/schedule">
+                    <i class="mdi mdi-calendar-clock m-r-5 text-muted"></i> Surveys
+                  </a>
+                  {% endif %}
+                  <a class="dropdown-item" href="/your/settings">
+                    <i class="mdi mdi-settings m-r-5 text-muted"></i> Settings
+                  </a>
+                  {% if auth is defined and auth.is_employer %}
+                  <a class="dropdown-item" href="/org"><i
+                    class="mdi mdi-hospital-building m-r-5 text-muted"></i> Your Organization
+                  </a>
+                  {% endif %}
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="/logout"><i class="mdi mdi-logout m-r-5 text-muted"></i>
+                    Logout</a>
+                  {% else %}
+                  <a class="dropdown-item" href="/login"><i class="mdi mdi-wallet m-r-5 text-muted"></i>
+                    Login</a>
+                  {% endif %}
+                </div>
+              </div>
+            </li>
+            <li class="menu-item list-inline-item d-none">
+              <!-- Mobile menu toggle-->
+              <a class="navbar-toggle nav-link" id="mobileToggle">
+                <div class="three-lines">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </div>
+              </a>
+              <!-- End mobile menu toggle-->
+            </li>
+          </ul>
+        </div>
+        <!-- end menu-extras -->
+      </div>
+    </div> <!-- end container -->
+  </div>
+  <!-- end topbar-main -->
+
+  <!-- section Nav Menu -->
+  <!--<div class="navbar-custom">
+    <div class="container-fluid">
+      <div id="navigation">
+        &lt;!&ndash; Navigation Menu&ndash;&gt;
+        <ul class="navigation-menu text-center">
+
+          <li class="has-submenu ">
+            <a href="/user/dash"><i class="mdi mdi-view-dashboard"></i>Dashboard</a>
+          </li>
+
+
+          <li class="has-submenu ">
+            <a href="/your/calendar"><i class="mdi mdi-calendar-clock"></i>Calendar</a>
+
+          </li>
+
+        </ul>&lt;!&ndash; End navigation menu &ndash;&gt;
+      </div> &lt;!&ndash; end #navigation &ndash;&gt;
+    </div> &lt;!&ndash; end container &ndash;&gt;
+  </div> &lt;!&ndash; end navbar-custom &ndash;&gt;-->
+</header>
+<!-- End Navigation Bar-->
+
+<!-- section Main Container -->
+<div class="wrapper dashboard-h page-content">
+  <div class="container-fluid">
+    {% block fulid_body %}
+    {% endblock %}
+  </div>
+  
+
+  <div class="container">
+    {% block body %}
+    {% endblock %}
+  </div>
+    <!-- section Footer -->
+    <!-- <footer class="footer py-4 bg-dark text-white-50" id="sticky-footer">
+      <div class="container-fluid text-center">
+        <div class="row">
+          <div class="col-lg-2 col-sm-2">
+            <div aria-labelledby="ytModalLabel" class="modal" id="ytModal" role="dialog" tabindex="-1">
+              <div class="modal-dialog fadeInUp animated" role="document">
+                <div class="modal-content">
+                  <div class="modal-body" id="yt-player">
+                    <div class="row nopad-nomarg">
+                      <div class="col-lg-2 col-sm-2 nopad-nomarg"></div>
+                      <div class="col-lg-8 col-sm-8 text-white nopad-nomarg">
+                        <span style="font-size: smaller; position: relative; top: 5px">{{ page_title }}</span>
+                      </div>
+                      <div class="col-lg-2 col-sm-2 nopad-nomarg">
+                        <span aria-label="Minimize" class="iconify minimizeBtn" data-dismiss="modal" data-icon="fa-solid:window-minimize" data-inline="false"></span>
+                      </div>
+                    </div>
+                    <iframe allowfullscreen frameborder="0" height="315"
+                            id="ytFrame" src="https://www.youtube-nocookie.com/embed/{{yt_id}}"
+                            width="560"></iframe>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8 col-sm-8 nopad-nomarg"></div>
+          <div class="col-lg-2 col-sm-2 nopad-nomarg">
+            <span class="iconify click-hand toggle_tut" data-icon="bi:collection-play-fill" data-inline="false" data-target="#ytModal"
+                  data-toggle="modal" role="button"></span>
+          </div>
+        </div>
+      </div>
+    </footer> -->
+</div> <!-- end wrapper -->
+
+<div class="fixed-bottom p-3 d-flex d-md-none justify-content-around bg-white border-top">
+  <a class="p-1" href="/dash">
+    <i class="fa fa-home font-24 text-muted"></i>
+  </a>
+  <a class="p-1" href="/stats">
+    <i class="fa fa-chart-pie font-24 text-muted"></i>
+  </a>
+  <a class="p-1" href="/schedule">
+    <i class="fa fa-question-circle font-24 text-muted"></i>
+  </a>
+  <div class="three-lines">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<script>
+  // TODO: Maybe somehow move all these js globals to a js file.
+  const in_production = {{ ENV.IN_PRODUCTION|string|lower }};
+  const alert_msg = "{{ auth.alert.message|safe }}";
+  const alert_style = "{{ auth.alert.style|safe }}";
+  var notifications,
+    noti_cnt;
+  const cat_colors = [
+    '#FE6E41',
+    '#FF5B61', // performance
+    '#63FF5B', // managed-up
+    '#29E7CD', // peer-review
+    '#FF5BC3' // cqi
+  ]
+
+</script>
+
+<script src="/js/common_pre.js"></script>
+
+<!-- detect if we need wss or ws -->
+<script>
+  const ws_proto = (location.protocol === 'https:') ? 'wss://' : 'ws://'
+  let ws,
+    wscb
+</script>
+<!-- load colors from server -->
+<script>
+  {% if colors is defined %}
+  const tag_colors = [
+    {% for color in colors.tags %}'{{color}}', {% endfor %}
+  ]
+  {% endif %}
+
+</script>
+
+
+
+
+<!-- End Main Container -->
+
+<script src="/js/queues.js"></script>
+<script src="/js/light-or-dark.js"></script>
+<!-- TODO: What is fa js for? -->
+<script src="/images/icons/fap/js/fontawesome.min.js"></script>
+<script src="/images/icons/fap/js/all.min.js"></script>
+<!--<script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>-->
+<!-- FIXME: Use local iconify scripts -->
+<script src="https://code.iconify.design/2/2.0.0-rc.6/iconify.min.js"></script>
+<script src="/urora/plugins/alertify/js/alertify.js"></script>
+
+<!-- <script src="/urora/plugins/select2/select2.min.js"></script> -->
+<!-- bootstrap-select -->
+<script src="/js/lib/bootstrap-select-1.13.14/js/bootstrap-select.min.js"></script>
+<script src="/js/lib/bootstrap-select-1.13.14/js/i18n/defaults-en_US.min.js"></script>
+
+<script src="/js/node_modules/@yaireo/dragsort/dist/dragsort.js"></script>
+
+<!-- App js -->
+<script src="/js/common.js"></script>
+<script src="/urora/js/app.js?version=20210627"></script>
+
+<script src="/js/ws.js?version=20210627"></script>
+{% block body_foot %}
+{% endblock body_foot %}
+
+<!--<div class="stick2btm">
+        <button class="btn btn-sm button">youtube </button>
+      </div>-->
+</body>
+</html>
+

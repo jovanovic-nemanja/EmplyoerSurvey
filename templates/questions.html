@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+.radio label input[type=radio][disabled]+.bmd-radio:after {
+  cursor: default;
+}
+</style>
+{% endblock head %}
+
+{% block body %}
+<div class="d-flex flex-column pb-3 mb-4 mb-lg-5 align-items-center">
+  <h4 class="mt-0 mb-3 font-weight-bold">{{ category.cat_name }}</h4>
+  <div class="text-center page-description">
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident, atque aut natus excepturi.
+  </div>
+</div>
+
+<!-- <a class="d-flex justify-content-center p-3 bg-white mb-5" style="border: 2px dotted #181f4e40;" href="#">
+  <span class="iconify" data-icon="ant-design:plus-circle-filled" data-inline="false" style="font-size: 20px; color: #15224F"></span>
+  <h5 class="ml-2 my-0 font-18 font-weight-bold">Add New Question</h5>
+</a> -->
+
+{% for row in questions %}
+<div class="card px-3 px-md-4 py-4 py-md-5 flex-column flex-lg-row align-items-center m-b-38">
+  <div class="w-100 mr-0 mr-lg-5" style="flex: 10;">
+    <div class="font-18 m-b-30 question-title text-center text-lg-left">{{ row.question }}</div>
+    <div class="d-flex justify-content-between px-1">
+      <div class="d-flex flex-column align-items-center">
+        <span>1</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" value="option1" disabled>
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center">
+        <span>2</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" value="option1" disabled>
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center">
+        <span>3</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" value="option1" disabled>
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center">
+        <span>4</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" value="option1" disabled>
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center">
+        <span>5</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" value="option1" disabled>
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center">
+        <span>6</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" value="option1" disabled>
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center">
+        <span>7</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" value="option1" disabled>
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center">
+        <span>8</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" value="option1" disabled>
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center">
+        <span>9</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" value="option1" disabled>
+          </label>
+        </div>
+      </div>
+      <div class="d-flex flex-column align-items-center">
+        <span>10</span>
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" value="option1" disabled>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex align-items-center mt-4 mt-lg-0 ml-0 ml-lg-3 w-100" style="flex: 6;">
+    <a href="#" class="btn btn-info btn-block btn-lg h62 d-none">
+      Edit Question
+    </a>
+    <a href="/question_stats/{{ row.id }}" class="btn btn-primary btn-block btn-lg h62">
+      View Analytics
+    </a>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

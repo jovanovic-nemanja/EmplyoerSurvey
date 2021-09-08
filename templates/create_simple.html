@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+{% block head_head %}
+<link href="/urora/plugins/fullcalendar/vanillaCalendar.css" rel="stylesheet" type="text/css" />
+<!-- DataTables -->
+<link href="/urora/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<link href="/urora/plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+<!-- Responsive datatable examples -->
+<link href="/urora/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+<link href="/js/jqcron/src/jqCron.css" type="text/css" />
+{% endblock head_head %}
+
+{% block head %}
+{% endblock head %}
+{% block body %}
+
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+
+    <div class="card m-b-30">
+      <div class="card-body table-responsive">
+        <div class="alwaysOnSwitch switch float-right" style="">
+          <label id="send_schedule_label">
+            <input id="send_schedule_toggle" type="checkbox" checked>
+            <span id="send_schedule_txt">Send Now</span>
+          </label>
+        </div>
+        <h5 class="header-title mt-0 pb-3">Add Survey Question</h5>
+
+        <div class="row">
+          <div class="col-sm" style="text-align: center; padding-bottom: 10px">
+            <div class=""
+                 style="height: 50px; width: 50px; border-width: 1px; border-style: solid; text-align: center;">
+              <div id="q_icon" class="align-middle" style="padding-top: 12px; padding-bottom: 12px; cursor: pointer">icon</div>
+            </div>
+          </div>
+          <div class="col-sm">
+            <div class="" style="">
+              <input id="qDepts" name="qDepts" value="" type="hidden" class="form-control" placeholder="Departments">
+            </div>
+          </div>
+          <div class="col-lg-6" style="padding-bottom: 10px">
+            <input class="form-control" id="question" placeholder="Type your question here" type="text">
+            <div class="" style="">
+              <input id="qTags" name="qTags" value="" type="hidden" class="form-control" placeholder="Tags">
+            </div>
+            <span id="choices"></span>
+            <span id="add-choice" class="iconify" data-icon="zmdi:plus" style="color: #636F9A; float: right; font-size: 26px;"></span>
+            <!--<BR>
+            <input type="text" class="form-control" id="q_tags" placeholder="Add tags here">-->
+          </div>
+          <div class="col-sm" style="text-align: center; padding-bottom: 10px">
+            <div id="send_tab">
+              <button class="btn btn-primary" id="addQuestion">
+                <i class="mdi mdi-send"></i>
+              </button>
+            </div>
+            <div id="schedule_tab">
+              <div id="q_scheduler_container" class="cron"></div>
+              <BR>
+              <button class="btn btn-primary" id="addSchedule"><i class="mdi mdi-clock-fast"></i></button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+
+    <div class="card m-b-30">
+      <div class="card-body table-responsive">
+
+        <h5 class="header-title mt-0 pb-3">Schedule Tags &amp; Departments</h5>
+
+        <div class="row">
+          <div class="col-sm">
+            <div class="" style="">
+              <input id="qDepts_2" name="qDepts_2" value="" type="hidden" class="form-control" placeholder="Departments">
+            </div>
+          </div>
+          <div class="col-lg-6" style="padding-bottom: 10px">
+            <div class="" style="">
+              <input id="qTags_2" name="qTags_2" value="" type="hidden" class="form-control" placeholder="Tags">
+            </div>
+            <!--<BR>
+            <input type="text" class="form-control" id="q_tags" placeholder="Add tags here">-->
+          </div>
+          <div class="col-sm" style="text-align: center; padding-bottom: 10px">
+            <div id="schedule_tab_2">
+              <div id="q_scheduler_container_2" class="cron2"></div>
+              <BR>
+              <button class="btn btn-primary" id="addSchedule_2"><i class="mdi mdi-clock-fast"></i></button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <div class="card m-b-30">
+      <div class="card-body table-responsive">
+        <!--        <h5 class="header-title">New Questions</h5>-->
+        <!--        <p class="text-muted"></p>-->
+        <div class="">
+          <table class="table table-questions table-notopborder" id="table-questions">
+            <thead>
+            <tr>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!--end row-->
+
+
+<div class="row">
+  <div class="col-md-12 col-xl-5">
+
+  </div>
+  <!-- section icon search -->
+  <div id="myOverlay" class="overlay">
+    <div class="closebtn">
+      <i class="fa fa-times fa-lg close-icon" title="Close Overlay" style="color: #FFFFFF"></i>
+    </div>
+    <div class="overlay-content">
+      <div>
+        <h3 class="text-white">Choose an icon</h3>
+        <input id="iconsIn" name="iconsIn" value="" type="hidden">
+      </div>
+    </div>
+  </div>
+  {% endblock body %}
+  {% block body_foot %}
+  <script>
+    // var tagifyIcon,
+    //   tagifyQtags
+    let questions = [
+      {% for question in questions %}
+    {{question|tojson}},
+    {% endfor %}
+    ]
+
+
+  </script>
+  <script src="/js/jqcron/src/jqCron.js"></script>
+  <script src="/js/jqcron/src/jqCron.en.js"></script>
+  <script src='/js/node_modules/@yaireo/tagify/dist/tagify.min.js'></script>
+  <script src='/js/node_modules/@yaireo/tagify/dist/jQuery.tagify.min.js'></script>
+  <!-- Required datatable js -->
+  <script src="/urora/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="/urora/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+  <!-- Buttons examples -->
+  <script src="/urora/plugins/datatables/dataTables.buttons.min.js"></script>
+  <script src="/urora/plugins/datatables/buttons.bootstrap4.min.js"></script>
+  <script src="/urora/plugins/datatables/jszip.min.js"></script>
+  <script src="/urora/plugins/datatables/pdfmake.min.js"></script>
+  <script src="/urora/plugins/datatables/vfs_fonts.js"></script>
+  <script src="/urora/plugins/datatables/buttons.html5.min.js"></script>
+  <script src="/urora/plugins/datatables/buttons.print.min.js"></script>
+  <script src="/urora/plugins/datatables/buttons.colVis.min.js"></script>
+  <!-- Responsive examples -->
+  <script src="/urora/plugins/datatables/dataTables.responsive.min.js"></script>
+  <script src="/urora/plugins/datatables/responsive.bootstrap4.min.js"></script>
+
+  <script src="/js/lib/morris.min.js"></script>
+<!--  <script src="/urora/pages/dashboard.js"></script>-->
+  <script src="/urora/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+  <script src="/urora/plugins/datatables/dataTables.responsive.min.js"></script>
+  <script src="/urora/plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="/urora/plugins/datatables/dataTables.buttons.min.js"></script>
+  <script src="/urora/pages/datatables.init.js"></script>
+  <script src="/js/tags.js"></script>
+  <script src="/js/create.js"></script>
+
+  {% endblock body_foot %}
+

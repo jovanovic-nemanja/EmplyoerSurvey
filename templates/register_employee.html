@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block head %}
+{% endblock head %}
+{% block body %}
+
+<!-- Begin page -->
+<!--<div class="accountbg"></div>-->
+<div class="wrapper-page">
+  <div class="display-table">
+    <div class="display-table-cell">
+      <diV class="container">
+        <div class="row">
+          <div class="col-md-3">
+            <!--            <img src="/images/businessman-surfing.png" alt="" class="img-fluid">-->
+          </div>
+          <div class="col-md-6">
+            <div class="card" style="border-width: 0 !important">
+              <div class="card-body">
+
+                <div class="text-center pt-3">
+                  <a href="index.html">
+                    <!--                    <img src="/images/handshake_blue.png" alt="logo" />-->
+                  </a>
+                </div>
+                {% if msg is defined %}
+                <span style="color: red; font-weight: bold">{{msg}}</span>
+                {% endif %}
+                <div class="p-3">
+                  <form class="form-horizontal mb-0" action="/do_register" method="POST">
+                    <input type="hidden" name="csrf" value="{{csrf}}">
+                    <input type="hidden" name="account_type" id="account_type" value="employee">
+                    <div class="form-group row">
+                      <div class="col-12">
+                        <label for="invite_code">Invite Code</label>
+                        <input id="invite_code" name="invite_code" class="form-control" type="text" required="" placeholder="Invite Code"
+                               value="{{invite_code}}">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-12">
+                        <input id="username" name="username" value="testuser" class="form-control" type="text" required="" placeholder="Username">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-12">
+                        <input id="first_name" name="first_name" value="Bob" class="form-control" type="text" required="" placeholder="First Name">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-12">
+                        <input id="last_name" name="last_name" value="Bobberson" class="form-control" type="text" required="" placeholder="Last Name">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-12">
+                        <input id="email_address" name="email_address" class="form-control" type="email" required="" placeholder="Email" value="{{email_address}}">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-12">
+                        <input id="password" name="password" value="OpenSesame333" class="form-control" type="password" required="" placeholder="Password">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-12">
+                        <input id="password_repeat" value="OpenSesame333" name="password_repeat" class="form-control" type="password" required="" placeholder="Repeat Password">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-12">
+                        <input id="mobile_number" name="mobile_number" type="text" placeholder="" class="form-control" value="{{mobile_number}}">
+                        <span class="font-13 text-muted">Mobile Phone +1 (555) 555-5555</span>
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <div class="col-12">
+                        <div class="custom-control custom-checkbox">
+                          <input id="accepted_tos" name="accepted_tos" type="checkbox" class="custom-control-input" id="customCheck1">
+                          <label class="custom-control-label font-weight-normal" for="customCheck1">I accept <a href="#"
+                                                                                                                class="text-muted">Terms
+                            and Conditions</a></label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group text-center row m-t-20">
+                      <div class="col-12">
+                        <button class="btn btn-raised btn-primary btn-block waves-effect waves-light" type="submit">
+                          Register
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="form-group m-t-10 mb-0 row">
+                      <div class="col-12 m-t-20 text-center">
+                        <a href="/login" class="text-muted">Already have account?</a>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+          <div class="col-md-3"></div>
+        </div>
+      </diV>
+    </div>
+  </div>
+</div>
+<script src="/urora/plugins/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+{% endblock body %}
+{% block body_foot %}
+<!--<script src="/js/register_employee.js"></script>-->
+{% endblock body_foot %}

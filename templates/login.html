@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block head %}
+{% endblock head %}
+{% block body %}
+
+<!-- Begin page -->
+<div class="display-table">
+  <div class="display-table-cell">
+    <div class="container">
+      <div class="row">
+        <div class="offset-md-2 col-md-8 offset-lg-3 col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <div class="text-center pt-3">
+                <a href="index.html">
+                  <center><div style="width: 50%; height: 150px; background-color: lightgrey"></div>
+                  </center>
+                </a>
+              </div>
+              <div class="px-3 pb-3">
+                {% if msg is defined %}
+                <b>{{msg}}</b>
+                {% endif %}
+                <form id="login_frm" class="form-horizontal m-t-20 mb-0" action="/do_login" method="POST">
+                  <input form="login_frm" id="csrf" name="csrf" type="hidden"
+                         value="{{csrf}}">
+                  <div class="form-group row">
+                    <div class="col-12">
+                      <!--<input class="form-control" name="username" id="username" type="text" required=""
+                             placeholder="Username, email, or phone" value="admin"
+                             form="login_frm">-->
+                      {% if ENV.IN_PRODUCTION %}
+                      <input type="text" class="form-control" name="username" id="username" form="login_frm">
+                      {% else %}
+                      <select class="form-control" name="username" id="username" form="login_frm">
+                        {% for user in usernames %}
+                        <option value="{{ user['login'] }}">{{ user['login'] }}</option>
+                        {% endfor %}
+                      </select>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="col-12">
+                      <input class="form-control" name="password" id="password" type="password" required=""
+                             placeholder="Password" form="login_frm" value="OpenSesame333">
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="col-12">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" name="remember" form="login_frm" class="custom-control-input"
+                               id="customCheck1">
+                        <label class="custom-control-label" for="customCheck1">Remember me</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group text-right row m-t-20">
+                    <div class="col-12">
+                      <button form="login_frm" class="btn btn-primary btn-block btn-lg h56" type="submit">Log In
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="d-flex flex-column flex-sm-row justify-content-sm-between m-t-20">
+                    <a href="/forgot_password" class="text-muted"><i class="mdi mdi-lock"></i> Forgot password?</a>
+                    <a href="/join" class="text-muted mt-3 mt-sm-0"><i class="mdi mdi-account-circle"></i> Create Account</a>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+        <div class="col-md-3"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock body %}

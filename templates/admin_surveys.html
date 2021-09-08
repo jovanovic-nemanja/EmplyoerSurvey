@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block head %}
+<!--<script type="text/javascript" src="/js/lib/datatables.js"></script>-->
+<!--<link rel="stylesheet" type="text/css" href="/css/lib/datatables.css"/>-->
+{% endblock head %}
+
+{% block body %}
+{{ super() }}
+<center>
+  <h1>Surveys</h1>
+</center>
+<div class="clearfix"></div>
+
+<section class="sec-padding">
+  <div class="container">
+    <div class="row">
+      <div class="table-container">
+        <table id="surveys_table" class="table-style-2" width="100%"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+{% endblock body %}
+
+{% block body_foot %}
+<script src="/js/admin_surveys.js"></script>
+{% endblock body_foot %}

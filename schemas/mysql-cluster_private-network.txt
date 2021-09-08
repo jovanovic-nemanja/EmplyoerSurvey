@@ -1,0 +1,11 @@
+username = doadmin
+password = ucy4ek1rk80689hb
+host = private-esdb-1-nyc3-do-user-8621886-0.b.db.ondigitalocean.com
+port = 25060
+database = esurvey
+sslmode = REQUIRED
+
+mysql://doadmin:ucy4ek1rk80689hb@private-esdb-1-nyc3-do-user-8621886-0.b.db.ondigitalocean.com:25060/esurvey?ssl-mode=REQUIRED
+
+mysql -u doadmin -pucy4ek1rk80689hb -h private-esdb-1-nyc3-do-user-8621886-0.b.db.ondigitalocean.com -P 25060 -D esurvey
+

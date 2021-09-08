@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+      "baseUrl": "./",
+      "paths": {
+        "assets/*": [
+          "./templates/**", // <-- relative to baseURL, so it will resolve to ./src/assets/*
+          "./static/**"
+        ]
+      }
+    }
+}

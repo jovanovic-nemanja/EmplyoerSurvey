@@ -1,0 +1,41 @@
+TODO: Make a py package out of the AppPlatform code.
+
+TODO: A global in-memory cache of surveys. Maybe graph.
+
+TODO: Convert ws python to https://github.com/timoj/aiohttp-socketio
+
+FIXME: Do a support ticket for redis cluster.
+
+TODO: WS Reconnect algo.
+
+TODO: Keep track of which WS users have been given what (Cache the redis cache in py)
+
+TODO: Captcha
+
+TODO: Cache default avatars to disk
+
+TODO: Change logo corners to match material's.
+
+TODO: Make tags support custom material and other icons.
+
+TODO: Advise on FA and other licenses.
+
+TODO: Activate multithread mode.
+
+TODO: aRedis or other package for clustering
+
+TODO: Make template filenames match route names.
+
+TODO: Run conn.commit() before each SELECT
+
+TODO: Create a time-picker for desktop-only browsers.
+
+TODO: Investigate Google Sheets integration: https://netlabe.com/how-to-create-online-survey-for-free-with-surveyjs-and-google-sheets-d9a782d0f458
+
+TODO: Create python-compatible None type in javascript.
+
+TODO: Experiment with jinja & .js files by making a route to a js file.
+
+FIXME: Remove chartist js includes from dash page.
+
+FIXME: Hourly cron selector not working.

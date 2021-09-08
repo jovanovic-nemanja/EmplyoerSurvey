@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="card m-b-30 px-3 px-md-5 py-3 py-md-4">
+  <div class="card-body table-responsive">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <h5 class="font-weight-bold">Settings</h5>
+      </div>
+      <div class="col-lg-12 col-md-12 col-sm-12 mt-3">
+        <label for="email_address">Email Address</label>
+        <input class="form-control" id="email_address" placeholder="Email" type="text"
+                value="{{auth.email_address}}">
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12 mt-4">
+        <label for="password">Pasword</label>
+        <input class="form-control" id="password" placeholder="Password" type="password">
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-12 mt-4">
+        <label for="password_repeat">Repeat Password</label>
+        <input class="form-control" id="password_repeat" placeholder="Repeat Password" type="password">
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12 mt-4">
+        <label for="mobile_number">Mobile Number</label>
+        <input class="form-control" id="mobile_number" placeholder="+1 555 555-5555" type="text"
+                value="{{auth.mobile_number}}">
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12 mt-4">
+        <label for="mobile_number">Current Password</label>
+        <input class="form-control" id="current_password" placeholder="Current Password" type="password"
+                value="testPass123">
+        <!-- TODO: Remove default password here -->
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-12 mt-4 d-flex align-items-end">
+        <button class="button btn btn-primary btn-lg btn-block h56" id="save_btn">Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}
+
+{% block body_foot %}
+<script src="/js/user_settings.js"></script>
+{% endblock body_foot %}

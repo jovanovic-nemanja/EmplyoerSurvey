@@ -1,0 +1,30 @@
+{
+  "name": "js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "admin_users.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@yaireo/dragsort": "^1.1.0",
+    "@yaireo/tagify": "^3.23.0",
+    "ace-builds": "^1.4.12",
+    "blake3-wasm": "^2.1.5",
+    "bootstrap-cron-picker": "^1.0.0",
+    "cronix": "^0.1.3",
+    "cronstrue": "^1.110.0",
+    "iconify": "^1.3.0",
+    "install": "^0.13.0",
+    "intl-tel-input": "^17.0.12",
+    "npm": "^7.6.3",
+    "prop-types": "^15.7.2",
+    "survey-creator": "^1.8.39",
+    "thesaurus": "0.0.1"
+  }
+}

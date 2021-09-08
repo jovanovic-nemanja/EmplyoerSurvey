@@ -1,0 +1,139 @@
+databases:
+  - cluster_name: redis-1-nyc3
+    engine: REDIS
+    name: redis-1-nyc3
+    production: true
+    version: "6"
+  - cluster_name: esdb-1-nyc3
+    db_name: esurvey
+    db_user: esurvey
+    engine: MYSQL
+    name: esdb-1-nyc3
+    production: true
+    version: "8"
+domains:
+  - domain: survey.surf
+    type: PRIMARY
+    zone: survey.surf
+name: employer-survey-website
+region: nyc
+services:
+  - build_command: sh build.sh
+    environment_slug: python
+    envs:
+      - key: REDIS_URL
+        scope: RUN_TIME
+        value: ${redis-1-nyc3.DATABASE_URL}
+      - key: MYSQL_HOSTNAME
+        scope: RUN_AND_BUILD_TIME
+        value: ${esdb-1-nyc3.HOSTNAME}
+      - key: MYSQL_USERNAME
+        scope: RUN_AND_BUILD_TIME
+        value: ${esdb-1-nyc3.USERNAME}
+      - key: MYSQL_DATABASE
+        scope: RUN_AND_BUILD_TIME
+        value: ${esdb-1-nyc3.DATABASE}
+      - key: MYSQL_PORT
+        scope: RUN_AND_BUILD_TIME
+        value: ${esdb-1-nyc3.PORT}
+      - key: SITE_USE_MULTITHREAD
+        scope: RUN_AND_BUILD_TIME
+        value: "False"
+      - key: SITE_HOST
+        scope: RUN_AND_BUILD_TIME
+        value: 0.0.0.0
+      - key: SITE_NAME
+        scope: RUN_AND_BUILD_TIME
+        value: Employer Surveys
+      - key: SITE_DEBUG_TOOLBAR
+        scope: RUN_AND_BUILD_TIME
+        value: "True"
+      - key: SITE_UVLOOP
+        scope: RUN_AND_BUILD_TIME
+        value: "False"
+      - key: SITE_UPLOAD_DIR
+        scope: RUN_AND_BUILD_TIME
+        value: SITE_UPLOAD_DIR
+      - key: SITE_GEO_PATH
+        scope: RUN_AND_BUILD_TIME
+        value: data/GeoLite2-City.mmdb
+      - key: SITE_COOKIE_NAME
+        scope: RUN_AND_BUILD_TIME
+        value: esurvey
+      - key: SITE_LOG_LEVEL
+        scope: RUN_AND_BUILD_TIME
+        value: "DEBUG"
+      - key: EMAIL_DEFAULT_SENDER
+        scope: RUN_AND_BUILD_TIME
+        value: site@survey.surf
+      - key: CSRF_FORM_FIELD
+        scope: RUN_AND_BUILD_TIME
+        value: csrf
+      - key: CSRF_SESSION_NAME
+        scope: RUN_AND_BUILD_TIME
+        value: csrf
+      - key: CSRF_SECRET
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+        value: EV[1:1vI7pRjcdF2rZ0afzEFw/qiCtQEY1aL4:oeglt1Elfi2oaSzTxhYR7ZjlJz36nW/Tqm1w4Meaj8BGS/A2r7qaUriLYu0Sdg==]
+      - key: MYSQL_PASSWORD
+        scope: RUN_AND_BUILD_TIME
+        value: ${esdb-1-nyc3.PASSWORD}
+      - key: DEBUG
+        scope: RUN_AND_BUILD_TIME
+        value: "TRUE"
+      - key: SITE_PORT
+        scope: RUN_AND_BUILD_TIME
+        value: ${HTTP_PORT}
+      - key: JWT_SECRET
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+        value: EV[1:VVXFtTndSK0hRs47i920km+Onky9cp5Q:0K/kl0SL51Knl6IaJp8yF1S3RTW2mJO7s/cm8buSYPX1vF3ROQNZl0A687DMDQ==]
+      - key: EMAIL_SENDGRID_KEY
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+        value: EV[1:sZsHQcIhtSkmQj1XrT9yAxVubGnHtllV:quMDHFsVRDyIuPbtxPQJrtNaqkmR0o75FzG6mZ6r4nHLEOFpRJjR7hDXWuPhoMBsZXY2ydUfx2vF/F+yuXC5pjFy3yS1Uhy6XIX4iKvIszgFrbi6lw==]
+      - key: SMS_TWILIO_ACCOUNT_SID
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+        value: EV[1:Q+QL+0t82xUN55VnOJTZQhYmnKOjvYV2:VazQum/ZFqQxpcoEbVic4ZepGsxliKuw2Y48tKGkG7wCwLw0muz/6uVtGrCXTLJGiaM=]
+      - key: SMS_TWILIO_AUTH_TOKEN
+        scope: RUN_AND_BUILD_TIME
+        type: SECRET
+        value: EV[1:7m9BvPag99El1BB4hUbkHbT5HIJwOeld:ongCcl8av2mSQOA+BSb/82cw0dzubxPbcRalieMwTpTQPuweXe1YAr+vDsmRyKUM]
+      - key: SITE_DOMAIN
+        scope: RUN_AND_BUILD_TIME
+        value: survey.surf
+      - key: SMS_TWILIO_NUMBER
+        scope: RUN_AND_BUILD_TIME
+        value: "+19549325677"
+    github:
+      branch: master
+      deploy_on_push: true
+      repo: Perceptively/employer-survey_website
+    health_check:
+      http_path: /
+    http_port: 7081
+    instance_count: 1
+    instance_size_slug: professional-l
+    name: employer-survey-website
+    routes:
+      - path: /
+    run_command: python main.py
+  - envs:
+      - key: DATABASE_URL
+        scope: RUN_TIME
+        value: ${redis-1-nyc3.DATABASE_URL}
+      - key: ARANGO_RANDOM_ROOT_PASSWORD
+        scope: RUN_AND_BUILD_TIME
+        value: "1"
+    http_port: 8529
+    image:
+      registry_type: DOCR
+      repository: arangodb
+      tag: latest
+    instance_count: 1
+    instance_size_slug: professional-s
+    name: arangodb
+    routes:
+      - path: /arangodb

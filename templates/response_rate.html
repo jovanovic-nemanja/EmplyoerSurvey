@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="/css/lib/datatables.css"/>
+{% endblock %}
+
+{% block body %}
+<div class="d-flex flex-column pb-3 mb-4 mb-lg-5 align-items-center">
+  <h4 class="m-0 font-weight-bold">Response Rate and Peer Review</h4>
+</div>
+<div class="card mb-3 mb-md-5 px-4 px-md-5 py-3 py-md-4">
+  <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center mb-3">
+    <h5 class="font-weight-bold mb-3 m-md-0">Employees</h5>
+  </div>
+  <table class="table table-striped table-responsive-sm table-responsive-md table-responsive-lg font-16" id="employee">
+    <thead>
+      <tr class="bg-primary">
+        <th class="text-white">Name</th>
+        <th class="text-white">Department</th>
+        <th class="text-white">Response Rate</th>
+        <th class="text-white">Peer Review</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for rate in employee_rates %}
+      <tr>
+        <td>{{ rate.first_name }} {{ rate.last_name }}</td>
+        <td>{{ rate.dept_name }}</td>
+        <td>{{ rate.response_rate|int }}%</td>
+        <td>{{ rate.peer_review|int }}%</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="card mb-3 mb-md-5 px-4 px-md-5 py-3 py-md-4">
+  <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center mb-3">
+    <h5 class="font-weight-bold mb-3 m-md-0">Departments</h5>
+  </div>
+  <table class="table table-striped table-responsive-sm table-responsive-md table-responsive-lg font-16" id="department">
+    <thead>
+      <tr class="bg-primary">
+        <th class="text-white">Department Name</th>
+        <th class="text-white">Response Rate</th>
+        <th class="text-white">Peer Review</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for rate in department_rates %}
+      <tr>
+        <td>{{ rate.dept_name }}</td>
+        <td>{{ rate.response_rate|int }}%</td>
+        <td>{{ rate.peer_review|int }}%</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block body_foot %}
+<script type="text/javascript" src="/js/lib/datatables.js"></script>
+<script>
+  $('table').DataTable({
+    filter: false,
+    lengthChange: false,
+    bInfo: false,
+    sort: false,
+  });
+  $(function () {
+    $('html, body').animate({
+      scrollTop: $(window.location.hash).offset().top - 150
+    });
+  });
+</script>
+{% endblock %}

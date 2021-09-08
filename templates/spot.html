@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block head_head %}
+<style>
+h5 {
+  font-size: 18px;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+
+{% if auth is defined and auth.is_employer %}
+<div class="container">
+  <h4 class="mt-0 mb-4 font-weight-bold">What is a HiyerScore?</h4>
+  <div class="page-description mb-5" style="width: auto;">
+    <p>Your company’s HiyerScore is a composite of four survey indices; namely, the:</p>
+    <ul>
+      <li>The Employee Performance Index</li>
+      <li>Peer Performance Index</li>
+      <li>Managed Up Performance Index</li>
+      <li>Corporate Quality Index</li>
+    </ul>
+    <p>Together and through a proprietary algorithm used by Hiyer, your company’s HiyerScore is generated to reflect your organization’s overall excellence, performance, growth in human capital, and risk mitigation.</p>
+  </div>
+  <h4 class="mt-0 mb-4 font-weight-bold">What does each index mean?</h4>
+  <h5>The Employee Performance Index</h5>
+  <div class="page-description mb-4" style="width: auto;">
+    This index directly measures a supervisor’s gauge of an individual team member’s performance under their management. Each employee receives touch points through this index’s survey questions that gather business intelligence on both the positive contributions an employee is making as well as negative activities which they may be knowing or unknowingly participating in. Only direct supervisors can participate at the team level for each employee’s Hiyer profile survey questions.
+  </div>
+  <h5>Peer Performance Index</h5>
+  <div class="page-description mb-4" style="width: auto;">
+    This index directly measures a peer’s gauge of an individual team member’s performance. Each employee receives touch points through this index’s survey questions that gather business intelligence on both the positive contributions an employee is making as well as negative activities which they may be knowing or unknowingly participating in. Only direct peers within a department can participate in their respective surveys.
+  </div>
+  <h5>Managed Up Performance Index</h5>
+  <div class="page-description mb-4" style="width: auto;">
+    This index directly measures a direct supervisor performance as gauged by their team. Each supervisor is rated by regular touch points through this index’s survey questions that gather business intelligence on both the positive contributions an employee is making as well as negative activities which they may be knowing or unknowingly participating in. Only employees under direct supervision can participate in managing up their direct reports for each respective manager’s Hiyer profile survey questions.
+  </div>
+  <h5>Corporate Quality Index</h5>
+  <div class="page-description mb-4" style="width: auto;">
+    This index measures the whole of a company’s quality as a recommendable employer and purveyor of its respective goods and services.  All levels of the workforce, from line staff to executive management, participate in this survey index.
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

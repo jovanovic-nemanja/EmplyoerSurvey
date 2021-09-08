@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block head_head %}
+
+{% endblock head_head %}
+
+{% block head %}
+<script src="https://unpkg.com/knockout@3.5.1/build/output/knockout-latest.js"></script>
+<script src="https://unpkg.com/survey-knockout@1.8.39/survey.ko.min.js"></script>
+<link href="https://unpkg.com/survey-knockout@1.8.39/survey.min.css" type="text/css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.10/ace.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.10/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
+<!-- Uncomment to enable Select2 <script src="https://unpkg.com/jquery"></script> <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" /> <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script> -->
+<link href="https://unpkg.com/survey-creator@1.8.39/survey-creator.min.css" type="text/css" rel="stylesheet"/>
+<script src="https://unpkg.com/survey-creator@1.8.39/survey-creator.min.js"></script>
+
+<!--<script src="/js/node_modules/survey-creator/survey-creator.min.js"></script>-->
+<!--<link href="/js/node_modules/survey-creator/survey-creator.min.css" type="text/css" rel="stylesheet"/>-->
+
+
+{% endblock head %}
+{% block body %}
+<div class="row">
+  <div class="col-lg-12 col-sm-12">
+    <div class="card m-b-30">
+      <div class="card-body table-responsive">
+
+        <div class="row">
+          <div class="col-lg-4 col-sm-12">
+            <div id="saved_crons_container" style="padding-bottom: 7px;"></div>
+            <div id="saved_surveys_container" style="padding-bottom: 7px;"></div>
+          </div>
+          <div class="col-lg-12 col-sm-12">
+            <div id="surveyContainer">
+              <div id="creatorElement"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}
+
+{% block body_foot %}
+<script>
+let survey_preload_id = null;
+{% if survey_id is defined and survey_id is not none %}
+survey_preload_id = "{{ survey_id }}";
+{% endif %}
+const survey_cats = [
+  {% for cat in categories %}
+{
+  id: "{{cat['id']}}",
+  name: "{{cat['cat_name']}}",
+  slug: "{{cat['cat_slug']}}",
+  text: "{{cat['cat_name']}}",
+  title: "{{cat['cat_name']}}"
+},
+  {% endfor %}
+]
+
+
+</script>
+<script type="text/html" id="cats-template">
+    <div id="survey_cat_container" style="display: inline-block;" class="survey-published-group">
+      <select id="cats" class="form-control" data-selected-text-format="count">
+        <option></option>
+        {% for cat in categories %}
+        <option value="{{cat['id']}}">{{cat['cat_name']}}</option>
+        {% endfor %}
+      </select>
+<!--        <a class="btn btn-primary" style="background-color: #f8ac59; border-color: #f8ac59;" data-bind="attr: { href: url }" target="_blank"><span title="Click here to run this survey...">Run Survey</span></a>-->
+    </div>
+</script>
+<script src="/js/create.js"></script>
+
+
+{% endblock body_foot %}
